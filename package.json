@@ -1,0 +1,9 @@
+{
+  "name": "comet",
+  "version": "0.1.0",
+  "description": "Generate beautiful API documentation sites",
+  "main": "src/index.js",
+  "author": "Elisha Witte <elishawitte@gmail.com>",
+  "license": "MIT",
+  "private": false
+}
