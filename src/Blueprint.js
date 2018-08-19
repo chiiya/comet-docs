@@ -3,6 +3,7 @@ class Blueprint {
     this.dataStructures = {};
     this.slugs = {};
     this.navItems = [];
+    this.resourceGroups = [];
   }
 
   setTitle(title) {
@@ -13,8 +14,8 @@ class Blueprint {
     this.description = description;
   }
 
-  setResourceGroups(resourceGroups) {
-    this.resourceGroups = resourceGroups;
+  addResourceGroup(resourceGroup) {
+    this.resourceGroups.push(resourceGroup);
   }
 
   setContent(content) {

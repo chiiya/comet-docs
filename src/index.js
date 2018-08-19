@@ -5,6 +5,6 @@ global.Logger = new (require('./Logger'))();
 Logger.comet('Starting build');
 const comet = new Comet(argv);
 comet.execute().then(blueprint => {
-  console.log(blueprint.description);
+  console.log(blueprint.resourceGroups[0].resources[0].actions);
   Logger.comet('Build completed');
 });

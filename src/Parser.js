@@ -6,6 +6,9 @@ const hljs = require('highlight.js');
 const slugify = require('slugify');
 const File = require('./File');
 const Blueprint = require('./Blueprint');
+const ResourceGroup = require('./models/ResourceGroup');
+const Resource = require('./models/Resource');
+const Action = require('./models/Action');
 const Exceptions = require('./Exceptions');
 
 class Parser {
@@ -72,11 +75,7 @@ class Parser {
         permalinkSymbol: '🔗',
         permalinkClass: 'permalink',
         slugify: (value) => {
-          let slug = slugify(value);
-          if (blueprint.hasSlug(slug)) {
-            slug = this.incrementSlug(slug);
-          }
-          blueprint.addSlug(slug);
+          const slug = this.getSlug(blueprint, value);
           blueprint.addNavItem({
             value,
             slug
@@ -90,10 +89,11 @@ class Parser {
 
     blueprint.setTitle(ast.name);
     blueprint.setDescription(md.render(ast.description));
-    blueprint.setResourceGroups(ast.resourceGroups);
     blueprint.setContent(ast.content);
     this.parseMetadata(blueprint, ast);
     this.parseDataStructures(blueprint, ast);
+    blueprint.resourceGroups = ast.resourceGroups;
+    // this.parseResourceGroups(blueprint, ast, md);
     return blueprint;
   }
 
@@ -118,6 +118,49 @@ class Parser {
         }
       });
     });
+  }
+
+  parseResourceGroups(blueprint, ast, md) {
+    const resourceGroups = ast.resourceGroups || [];
+    resourceGroups.forEach((resourceGroup) => {
+      const rg = new ResourceGroup(resourceGroup);
+      rg.setSlug(this.getSlug(blueprint, rg.name));
+      if (resourceGroup.description) {
+        rg.setDescription(md.render(resourceGroup.description));
+      }
+      const resources = resourceGroup.resources || [];
+      resources.forEach((resource) => {
+        const r = new Resource(resource);
+        r.setSlug(this.getSlug(blueprint, `${rg.name}-${r.name}`));
+        if (resource.description) {
+          r.setDescription(md.render(resource.description));
+        }
+        const actions = resource.actions || [];
+        actions.forEach((action) => {
+          const a = new Action(action);
+          a.setSlug(this.getSlug(blueprint, `${rg.name}-${r.name}-${a.method}`));
+          if (a.attributes.uriTemplate === '') {
+            if (a.parameters.length === 0) {
+              a.parameters = r.parameters;
+            } else {
+              a.parameters = a.parameters.concat(r.parameters);
+            }
+          }
+          r.addAction(action);
+        });
+        rg.addResource(r);
+      });
+      blueprint.addResourceGroup(rg);
+    });
+  }
+
+  getSlug(blueprint, value) {
+    let slug = slugify(value);
+    if (blueprint.hasSlug(slug)) {
+      slug = this.incrementSlug(slug);
+    }
+    blueprint.addSlug(slug);
+    return slug;
   }
 
   incrementSlug(slug) {
