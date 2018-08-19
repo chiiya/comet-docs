@@ -1,6 +1,8 @@
 class Blueprint {
   constructor() {
     this.dataStructures = {};
+    this.slugs = {};
+    this.navItems = [];
   }
 
   setTitle(title) {
@@ -29,6 +31,18 @@ class Blueprint {
 
   addDataStructure(dataStructure) {
     this.dataStructures[dataStructure.meta.id] = dataStructure;
+  }
+
+  hasSlug(slug) {
+    return this.slugs.hasOwnProperty(slug);
+  }
+
+  addSlug(slug) {
+    this.slugs[slug] = true;
+  }
+
+  addNavItem(item) {
+    this.navItems.push(item);
   }
 }
 

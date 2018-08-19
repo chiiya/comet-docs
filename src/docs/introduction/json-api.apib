@@ -1,0 +1,70 @@
+# JSON API
+
+In the following section, a short overview of the general capabilities
+of the API will be given.
+
+**Note:** This documentation will display parameters with brackets
+(`[` and `]`) for readability, but actual URLs will need to be
+percent-encoded (`%5B` and `%5D`).
+
+## Request Headers
+
+All requests to the API should contain these headers:
+
+```
+Accept: application/json
+Content-Type: application/json
+```
+
+## Filtering and Search
+
+Filtering lets you query data that contains certain matching
+attributes or relationships. These take the form of
+`filter[attribute]=value`. For example, you can request all the
+stations offering a selection of services:
+
+```
+/stations?filter[services]=petit_bistro,aral_store,opening_24
+```
+
+## Pagination
+
+Pagination is enabled by default for large sets of results (as is the case
+with stations right now). You can optionally disable pagination by passing 
+along the `paginated` parameter and setting it to false:
+
+```
+/stations?paginated=false
+```
+
+Paginated responses will include URLS for the first, last, previous and next page
+of resources in the `links` object. Some meta information regarding pagination
+and result count is also included:
+
+```
+"links": {
+    "first": "http://local.api.tankstelle.aral.de/api/v2/stations?page=1",
+    "last": "http://local.api.tankstelle.aral.de/api/v2/stations?page=154",
+    "prev": null,
+    "next": "http://local.api.tankstelle.aral.de/api/v2/stations?page=2"
+},
+"meta": {
+    "current_page": 1,
+    "from": 1,
+    "last_page": 154,
+    "path": "http://local.api.tankstelle.aral.de/api/v2/stations",
+    "per_page": 15,
+    "to": 15,
+    "total": 2300
+}
+```
+
+## Includes
+
+For some resources (e.g. stations), you can also include related resources
+with `include=[relationship]`. Acomma-delimited list can be used to 
+request multiple relationships.
+
+```
+/stations?include=brand,cards,services
+```

@@ -1,0 +1,31 @@
+## Brands [/brands]
+
+### List all brands [GET]
+
++ Response 200 (application/json)
+    + Attributes
+        + data (array[Brand], required)
++ Response 500 (application/json)
+    + Attributes (Error500)
+
+## Brand [/brands/{id}]
+
++ Parameters
+    + id (number, `1`) - ID of the brand
+
+
+
+### Fetch Resource [GET]
+
++ Response 200 (application/json)
+    + Attributes
+        + data (Brand)
+
++ Response 400 (application/vnd.api+json)
+    + Attributes (Error400)
+
++ Response 404 (application/vnd.api+json)
+    + Attributes (Error404)
+
++ Response 500 (application/vnd.api+json)
+    + Attributes (Error500)
