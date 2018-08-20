@@ -39,12 +39,6 @@ class Action {
     this.uri = action.attributes.uriTemplate || '';
 
     /**
-     * @type {Array}
-     * @description Array of examples
-     */
-    this.examples = action.examples || [];
-
-    /**
      * @type {String}
      * @description Slug used for anchor links
      */
@@ -61,6 +55,20 @@ class Action {
      * @description Array of parameters
      */
     this.parameters = [];
+
+    /**
+     * @type {Array}
+     * @description Array of examples
+     */
+    this.examples = [];
+  }
+
+  /**
+   * Add an example to the action examples.
+   * @param {Example} example
+   */
+  addExample(example) {
+    this.examples.push(example);
   }
 }
 

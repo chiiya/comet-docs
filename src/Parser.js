@@ -9,6 +9,9 @@ const Blueprint = require('./models/Blueprint');
 const ResourceGroup = require('./models/ResourceGroup');
 const Resource = require('./models/Resource');
 const Action = require('./models/Action');
+const Example = require('./models/Example');
+const ExampleRequest = require('./models/ExampleRequest');
+const ExampleResponse = require('./models/ExampleResponse');
 const Exceptions = require('./Exceptions');
 
 /**
@@ -138,6 +141,21 @@ class Parser {
         const actions = resource.actions || [];
         actions.forEach((action) => {
           const parsedAction = this.parseAction(action, parsedResource, parsedResourceGroup, blueprint, md);
+          const examples = action.examples || [];
+          examples.forEach((example) => {
+            const parsedExample = this.parseExample(example, md);
+            const requests = example.requests || [];
+            requests.forEach((request) => {
+              const parsedRequest = this.parseRequest(request, md);
+              parsedExample.addRequest(parsedRequest);
+            });
+            const responses = example.responses || [];
+            responses.forEach((response) => {
+              const parsedResponse = this.parseResponse(response, md);
+              parsedExample.addResponse(parsedResponse);
+            });
+            parsedAction.addExample(parsedExample);
+          });
           parsedResource.addAction(parsedAction);
         });
         parsedResourceGroup.addResource(parsedResource);
@@ -201,6 +219,39 @@ class Parser {
     });
 
     return a;
+  }
+
+  /**
+   * Parse a single example.
+   * @param {Object}  example
+   * @param {Object}  md
+   * @return {Example}
+   */
+  parseExample(example, md) {
+    const description = md.render((example.description || ''));
+    return new Example(example, description);
+  }
+
+  /**
+   * Parse a single example request.
+   * @param {Object}  request
+   * @param {Object}  md
+   * @return {ExampleRequest}
+   */
+  parseRequest(request, md) {
+    const description = md.render((request.description || ''));
+    return new ExampleRequest(request, description);
+  }
+
+  /**
+   * Parse a single example response.
+   * @param {Object}  response
+   * @param {Object}  md
+   * @return {ExampleResponse}
+   */
+  parseResponse(response, md) {
+    const description = md.render((response.description || ''));
+    return new ExampleResponse(response, description);
   }
 
   /**
