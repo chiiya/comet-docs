@@ -1,7 +1,7 @@
 const {Signale} = require('signale');
 const ora = require('ora');
 
-// Ora options
+// Signale options
 const options = {
   disabled: false,
   interactive: false,

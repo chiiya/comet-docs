@@ -20,8 +20,8 @@ class File {
 
   /**
    * Static constructor.
-   *
    * @param {string} file
+   * @return {File} New File instance
    */
   static find(file) {
     return new File(file);
@@ -29,6 +29,7 @@ class File {
 
   /**
    * Get the size of the file.
+   * @return {number}
    */
   size() {
     return fs.statSync(this.path()).size;
@@ -36,8 +37,8 @@ class File {
 
   /**
    * Determine if the given file exists.
-   *
    * @param {string} file
+   * @return {boolean}
    */
   static exists(file) {
     return fs.existsSync(file);
@@ -54,6 +55,7 @@ class File {
 
   /**
    * Get the name of the file.
+   * @return {string}
    */
   name() {
     return this.segments.file;
@@ -61,6 +63,7 @@ class File {
 
   /**
    * Get the name of the file, minus the extension.
+   * @return {string}
    */
   nameWithoutExtension() {
     return this.segments.name;
@@ -68,6 +71,7 @@ class File {
 
   /**
    * Get the extension of the file.
+   * @return {string}
    */
   extension() {
     return this.segments.ext;
@@ -75,6 +79,7 @@ class File {
 
   /**
    * Get the absolute path to the file.
+   * @return {string}
    */
   path() {
     return this.absolutePath;
@@ -82,6 +87,7 @@ class File {
 
   /**
    * Get the relative path to the file, from the project root.
+   * @return {string}
    */
   relativePath() {
     return path.relative(process.cwd(), this.path());
@@ -89,6 +95,7 @@ class File {
 
   /**
    * Get the absolute path to the file, minus the extension.
+   * @return {string}
    */
   pathWithoutExtension() {
     return this.segments.pathWithoutExt;
@@ -96,6 +103,7 @@ class File {
 
   /**
    * Get the base directory of the file.
+   * @return {string}
    */
   base() {
     return this.segments.base;
@@ -103,6 +111,7 @@ class File {
 
   /**
    * Determine if the file is a directory.
+   * @return {boolean}
    */
   isDirectory() {
     return this.segments.isDir;
@@ -110,6 +119,7 @@ class File {
 
   /**
    * Determine if the path is a file, and not a directory.
+   * @return {boolean}
    */
   isFile() {
     return this.segments.isFile;
@@ -119,6 +129,7 @@ class File {
    * Write the given contents to the file.
    *
    * @param {string} body
+   * @return {File}
    */
   write(body) {
     if (typeof body === 'object') {
@@ -134,6 +145,7 @@ class File {
 
   /**
    * Read the file's contents.
+   * @return {string}
    */
   read() {
     return fs.readFileSync(this.path(), {
@@ -143,33 +155,31 @@ class File {
 
   /**
    * Copy the current file to a new location.
-   *
    * @param {string} destination
+   * @return {File}
    */
   copyTo(destination) {
     fs.copySync(this.path(), destination);
-
     return this;
   }
 
   /**
    * Rename the file.
-   *
    * @param {string} to
+   * @return {File}
    */
   rename(to) {
     to = path.join(this.base(), to);
-
     fs.renameSync(this.path(), to);
-
     return new File(to);
   }
 
   /**
    * Parse the file path.
+   * @return {object}
    */
   parse() {
-    let parsed = path.parse(this.absolutePath);
+    const parsed = path.parse(this.absolutePath);
 
     return {
       path: this.filePath,

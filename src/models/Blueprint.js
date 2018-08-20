@@ -1,3 +1,7 @@
+/**
+ * Blueprint class
+ * This class holds the parsed elements from the AST output by Protagonist
+ */
 class Blueprint {
   constructor() {
     this.dataStructures = {};
