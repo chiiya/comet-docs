@@ -1,0 +1,23 @@
+%----------------------------------------------------------------------------------------
+%	Base Layout
+%----------------------------------------------------------------------------------------
+
+\input{../layouts/meta}
+\let\oldsection\section
+\renewcommand\section{\clearpage\oldsection}
+\usepackage[automake]{glossaries}
+\addbibresource{../bib.bib}
+\input{../glossary}
+
+\begin{document}
+\sloppy
+
+\input{../layouts/title_1}
+{ \huge \bfseries Domänenrecherche} % Title
+\input{../layouts/title_2}
+
+\input{content}
+
+\printbibliography
+
+\end{document}
