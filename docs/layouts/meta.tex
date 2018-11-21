@@ -6,9 +6,11 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}
+\usepackage{amsmath}
+\usepackage[normalem]{ulem}
 \usepackage{csquotes}
 \usepackage{tabularx}
-\usepackage[backend=biber]{biblatex}
+\usepackage[style=authoryear,isbn=false,backend=biber]{biblatex}
 \usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage{amsfonts}
@@ -62,3 +64,12 @@
 \setlength\parindent{0pt} % Uncomment to remove all indentation from paragraphs
 
 \graphicspath{{images/}} % Specifies the directory where pictures are stored
+
+\renewcommand*{\nameyeardelim}{\addcomma\space}
+\renewcommand*{\postnotedelim}{\addcolon\space}
+\DeclareFieldFormat{postnote}{#1}
+\DeclareFieldFormat{multipostnote}{#1}
+
+\usepackage{xpatch}
+\xpretobibmacro{date+extrayear}{\addperiod\space}{}{}
+\xapptobibmacro{date+extrayear}{\nopunct}{}{}

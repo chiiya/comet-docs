@@ -2,11 +2,11 @@
 %	INTRODUCTION
 %----------------------------------------------------------------------------------------
 
-\section{Domäne}
+\section{Einführung in die Thematik}
 
-\subsection{Einleitung}
+\subsection{REST}
 
-Representational State Transfer (REST) ist eine Abstraktion der architektonischen Elemente innerhalb eines verteilten Hypermediasystems. Es ist somit ein Softwarearchitekturstil, der die architektonischen Prinzipien, Eigenschaften und Einschränkungen für die Umsetzung von internetbasierten verteilten Systemen definiert \cite{fielding2000architectural}[86]. REST basiert auf fünf Kernprinzipien \cite{tilkov2015rest}[11]:
+Representational State Transfer (REST) ist eine Abstraktion der architektonischen Elemente innerhalb eines verteilten Hypermediasystems. Es ist somit ein Softwarearchitekturstil, der die architektonischen Prinzipien, Eigenschaften und Einschränkungen für die Umsetzung von internetbasierten verteilten Systemen definiert \parencite[86]{fielding2000architectural}. REST basiert auf fünf Kernprinzipien \parencite[11]{tilkov2015rest}:
 \begin{itemize}
 	\item Ressourcen als Abstraktion von Informationen, identifiziert durch einen eindeutigen \emph{resource identifier}
 	\item Verknüpfungen / Hypermedia
@@ -16,4 +16,48 @@ Representational State Transfer (REST) ist eine Abstraktion der architektonische
 \end{itemize}
 
 In Folgendem wird untersucht, welche maschinenlesbare Spezifikationsformate zur Beschreibung von auf HTTP basierenden REST APIs zur Verfügung stehen. Ziel dieser Untersuchung ist es, eine abstrakte Modellierung von REST APIs zu konzipieren, die verwendet werden kann, um eine API Spezifikation in eine interne Datenstruktur zu überführen, welche dann anschließend angereichert wird um automatisiert Artefakte wie Dokumentation oder Test-Cases zu generieren. Im Zuge dessen wird ebenfalls analysiert, welche Möglichkeiten in diesem Feld bereits existieren.
+
+\subsection{Spezifikationsformate}
+
+\subsubsection{Contract First und Contract Last}
+
+Es kann im Wesentlichen zwischen zwei verschiedenen Ansätzen zur Definition des Vertrages, den eine API garantiert, unterschieden werden \parencite[272]{spichale2017api}:
+
+\begin{itemize}
+	\item \emph{Contract-First}. Bei diesem Ansatz wird zunächst der Vertrag (also die Spezifikation der API) geschrieben, und anschließend die Implementierung. Vorteilhaft ist hier der größere Fokus auf dem Design der Schnittstelle. In frühen Iterationen der Spezifikation kann in Abstimmung mit den Konsumenten der API mit geringen Aufwand der Vertrag gefestigt werden, sodass später bei der Implementierung weniger Änderungen anfallen. Nachteil ist, dass Entwickler mehr mit den eigentlichen Spezifikationen arbeiten müssen, und diese nicht automatisch generieren können.
+	\item \emph{Contract-Last}. Bei diesem Ansatz existiert die Implementierung bereits, und die Beschreibung wird nachträglich erzeugt. Häufig können hier unterstützend Tools benutzt werden, welche die Spezifikation automatisch aus der Implementierung generieren, und der Entwickler muss meistens nur noch einige Annotationen anpassen. Da bei der automatischen Generierung Schemas in vielen Fällen dupliziert werden, kann dies zu mehr Aufwand führen, wenn manuelle Anpassungen vorgenommen werden müssen. Ebenso reduziert dies die Wiederverwendbarkeit von Spezifikationsteilen oder Schemas \parencite[1]{zhong2009contract}.
+\end{itemize}
+
+Bei beiden Ansätzen müssen Tests angelegt werden, die sicherstellen, dass die Implementierung nicht von der Beschreibung bzw. Dokumentation abweicht.
  
+\subsubsection{RAML}
+RAML (\emph{RESTful API Modeling Language}) ist ein auf YAML basierende Spezifikationsformat. Es wurde insbesondere für den \emph{Contract-First} Ansatz konzipiert, der Schwerpunkt liegt damit auf dem API-Design \parencites[277]{spichale2017api}[165]{tilkov2015rest}. Beschreibungen können in Markdown formatiert werden. Jedes RAML-Dokument beginnt mit der Angabe der RAML-Version und einigen allgemeinen Informationen zur API, wie Titel, URL und Version. Hier können ebenfalls Strukturierungshilfen wie Traits oder Datentypen definiert werden, welche dann im Rest des Dokumentes eingebunden werden können. Anschließend folgen die Beschreibungen der Ressourcen und Subressourcen. Zur Beschreibung von Requests und Responses können optional die bereits definierten Datentypen oder auch JSON-Schema Definitionen verwendet werden. Über \emph{Includes} kann die Spezifikation in mehrere Dateien aufgeteilt werden.
+
+Folgendes Beispiel wurde aus der RAML-Spezifikation entnommen \parencite{ramlspec}.
+
+\begin{lstlisting}
+#%RAML 1.0
+title: GitHub API
+version: v3
+baseUri: https://api.github.com
+mediaType:  application/json
+securitySchemes:
+  oauth_2_0: !include securitySchemes/oauth_2_0.raml
+traits:
+securedBy: [ oauth_2_0 ]
+title: API with Types
+types:
+  User:
+    type: object
+    properties:
+      firstname: string
+      lastname:  string
+      age:       number
+/users/{id}:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: User
+\end{lstlisting}
