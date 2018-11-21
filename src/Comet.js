@@ -12,7 +12,7 @@ class Comet {
    * @param {Object} argv
    * @param {string} argv.i - Path of the API Blueprint file
    */
-  constructor(argv)  {
+  constructor(argv) {
     this.options = {
       file: new File(argv.i),
       directory: process.cwd(),
@@ -34,7 +34,6 @@ class Comet {
       process.exit(-1);
     }
   }
-
 }
 
 module.exports = Comet;

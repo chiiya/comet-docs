@@ -149,7 +149,7 @@ class File {
    */
   read() {
     return fs.readFileSync(this.path(), {
-      encoding: 'utf-8'
+      encoding: 'utf-8',
     });
   }
 
@@ -190,7 +190,7 @@ class File {
       name: parsed.name,
       ext: parsed.ext,
       file: parsed.base,
-      base: parsed.dir
+      base: parsed.dir,
     };
   }
 }

@@ -27,6 +27,7 @@ yarn-error.log*
 #Build generated
 dist/
 build/
+.cache/
 
 # Serverless generated files
 .serverless/

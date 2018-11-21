@@ -58,11 +58,17 @@ class Parser {
     let contents = this.file.read();
     // Replace include statements with the contents of the included files
     // TODO: Allow recursive includes (includes in included files)
-    contents = contents.replace(/( *)<!-- include\((.*)\) -->/gmi, (match, spaces, fileName) => {
-      const fullPath = path.join(this.file.base(), fileName);
-      const lines = File.find(fullPath).read().replace(/\r\n?/g, '\n').split('\n');
-      return `${spaces}${lines.join(`\n${spaces}`)}`;
-    });
+    contents = contents.replace(
+      /( *)<!-- include\((.*)\) -->/gim,
+      (match, spaces, fileName) => {
+        const fullPath = path.join(this.file.base(), fileName);
+        const lines = File.find(fullPath)
+          .read()
+          .replace(/\r\n?/g, '\n')
+          .split('\n');
+        return `${spaces}${lines.join(`\n${spaces}`)}`;
+      }
+    );
     // Required to parse files on Windows
     contents = contents.replace(/\r\n?/g, '\n').replace(/\t/g, '    ');
     return contents;
@@ -98,7 +104,7 @@ class Parser {
    * @param {Object} ast
    */
   parseMetadata(blueprint, ast) {
-    ast.metadata.forEach(metaDatum => {
+    ast.metadata.forEach((metaDatum) => {
       switch (metaDatum.name) {
         case 'HOST':
           blueprint.setHost(metaDatum.value);
@@ -134,13 +140,28 @@ class Parser {
   parseResourceGroups(blueprint, ast, md) {
     const resourceGroups = ast.resourceGroups || [];
     resourceGroups.forEach((resourceGroup) => {
-      const parsedResourceGroup = this.parseResourceGroup(resourceGroup, blueprint, md);
+      const parsedResourceGroup = this.parseResourceGroup(
+        resourceGroup,
+        blueprint,
+        md
+      );
       const resources = resourceGroup.resources || [];
       resources.forEach((resource) => {
-        const parsedResource = this.parseResource(resource, parsedResourceGroup, blueprint, md);
+        const parsedResource = this.parseResource(
+          resource,
+          parsedResourceGroup,
+          blueprint,
+          md
+        );
         const actions = resource.actions || [];
         actions.forEach((action) => {
-          const parsedAction = this.parseAction(action, parsedResource, parsedResourceGroup, blueprint, md);
+          const parsedAction = this.parseAction(
+            action,
+            parsedResource,
+            parsedResourceGroup,
+            blueprint,
+            md
+          );
           const examples = action.examples || [];
           examples.forEach((example) => {
             const parsedExample = this.parseExample(example, md);
@@ -173,7 +194,7 @@ class Parser {
    */
   parseResourceGroup(resourceGroup, blueprint, md) {
     const slug = this.getSlug(blueprint, resourceGroup.name);
-    const description = md.render((resourceGroup.description || ''));
+    const description = md.render(resourceGroup.description || '');
     return new ResourceGroup(resourceGroup.name, slug, description);
   }
 
@@ -186,8 +207,11 @@ class Parser {
    * @return {Resource}
    */
   parseResource(resource, resourceGroup, blueprint, md) {
-    const slug = this.getSlug(blueprint, `${resourceGroup.name}-${resource.name}`);
-    const description = md.render((resource.description || ''));
+    const slug = this.getSlug(
+      blueprint,
+      `${resourceGroup.name}-${resource.name}`
+    );
+    const description = md.render(resource.description || '');
     return new Resource(resource, slug, description);
   }
 
@@ -201,8 +225,11 @@ class Parser {
    * @return {Action}
    */
   parseAction(action, resource, resourceGroup, blueprint, md) {
-    const slug = this.getSlug(blueprint, `${resourceGroup.name}-${resource.name}-${action.method}`);
-    const description = md.render((action.description || ''));
+    const slug = this.getSlug(
+      blueprint,
+      `${resourceGroup.name}-${resource.name}-${action.method}`
+    );
+    const description = md.render(action.description || '');
     const a = new Action(action, slug, description);
     // Parameters can be defined on the action or parent resource, or both.
     if (a.uri === '') {
@@ -215,7 +242,9 @@ class Parser {
     // Filter out duplicates
     const usedParameters = {};
     a.parameters = a.parameters.filter((parameter) => {
-      return usedParameters.hasOwnProperty(parameter.name) ? false : (usedParameters[parameter.name] = true);
+      return usedParameters.hasOwnProperty(parameter.name)
+        ? false
+        : (usedParameters[parameter.name] = true);
     });
 
     return a;
@@ -228,7 +257,7 @@ class Parser {
    * @return {Example}
    */
   parseExample(example, md) {
-    const description = md.render((example.description || ''));
+    const description = md.render(example.description || '');
     return new Example(example, description);
   }
 
@@ -239,7 +268,7 @@ class Parser {
    * @return {ExampleRequest}
    */
   parseRequest(request, md) {
-    const description = md.render((request.description || ''));
+    const description = md.render(request.description || '');
     return new ExampleRequest(request, description);
   }
 
@@ -250,7 +279,7 @@ class Parser {
    * @return {ExampleResponse}
    */
   parseResponse(response, md) {
-    const description = md.render((response.description || ''));
+    const description = md.render(response.description || '');
     return new ExampleResponse(response, description);
   }
 
@@ -282,9 +311,9 @@ class Parser {
           const slug = this.getSlug(blueprint, value);
           blueprint.addNavItem({
             value,
-            slug
+            slug,
           });
-        }
+        },
       })
       .use(require('markdown-it-checkbox'));
   }
@@ -314,7 +343,6 @@ class Parser {
     }
     return `${slug}-1`;
   }
-
 }
 
 module.exports = Parser;

@@ -1,4 +1,4 @@
-const {Signale} = require('signale');
+const { Signale } = require('signale');
 const ora = require('ora');
 
 // Signale options
@@ -11,9 +11,9 @@ const options = {
     comet: {
       badge: '🌠',
       color: 'cyanBright',
-      label: 'comet'
-    }
-  }
+      label: 'comet',
+    },
+  },
 };
 
 /**
