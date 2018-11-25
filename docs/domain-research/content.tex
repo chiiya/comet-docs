@@ -4,6 +4,44 @@
 
 \section{Einführung in die Thematik}
 
+Innerhalb dieses einführenden Kapitels in die Thematik werden Grundlagen bezüglich der Bereiche, in denen sich das Projekt bewegt, aufgezeigt. Dies umfasst eine kurze Erläutering der Prinzipien von HTTP und REST, sowie eine Untersuchung der verschiedenen Deskriptionsformate zum Beschreiben von REST APIs.
+
+\subsection{HTTP}
+
+Das \emph{Hypertext Transfer Protocol} (HTTP) ist ein Anwendungsprotokoll zur Kommunikation über ein Netzwerk. HTTP ist das primäre Kommunikationsprotokoll im World Wide Web, und wurde von der Internet Engineering Task Force (IETF) und dem World Wide Web Consortium (W3C) in einer Reihe von RFC-Dokumenten (z.B. \emph{RFC 7230}, \emph{RFC 7231} und \emph{RFC 7540}) standardisiert. Eine HTTP-Nachricht wird in der Regel über TCP übertragen, und besteht aus 4 Komponenten:
+
+\begin{description}
+	\item \emph{Verb / Methode}: Operationstyp, der durchgeführt werden soll, beispielsweise das Anfragen einer Ressource.
+    \item \emph{Ressourcenpfad}: Ein Bezeichner, der angibt, auf welche Ressource die HTTP-Operation angewendet werden soll.
+    \item \emph{Headers}: Zusätzliche Metadaten, ausgedrückt als Liste von Key/Value-Paaren.
+    \item \emph{Body}: Nutzdaten der Nachricht.
+\end{description}
+
+Das HTTP Protokoll erlaubt die folgenden Operationen bzw. Methoden:
+
+\begin{description}
+	\item \emph{GET}: Die angegebene Ressource sollte im Body-Teil der Antwort zurückgegeben werden.
+	\item \emph{HEAD}: Wie \emph{GET}, nur dass die Nutzdaten nicht zurückgegeben werden sollen. Dies ist nützlich, wenn nur überprüfen wird, ob eine Ressource existiert, oder wenn nur die Header abgerufen werden sollen.
+	\item \emph{POST}: Daten werden an den Server geschickt. Häufig wird diese Methode benutzt, um neue Ressourcen anzulegen.
+	\item \emph{DELETE}: Die angegebene Ressource löschen.
+	\item \emph{PUT}: Die angegeben Ressource mit neuen Daten ersetzen.
+	\item \emph{PATCH}: Ändert eine Ressource, ohne diese vollständig zu ersetzen.
+	\item \emph{TRACE}: Liefert die Anfrage so zurück, wie der Server sie empfangen hat.
+	\item \emph{OPTIONS}: Liefert eine Liste der vom Server unterstützten Methoden auf einer Ressource.
+	\item \emph{CONNECT}: Eine Tunneling-Verbindung über einen HTTP-Proxy herstellen, die normalerweise für verschlüsselte Kommunikationen benötigt wird.
+\end{description}
+
+Wenn ein Client eine HTTP-Anfrage sendet, schickt der Server eine HTTP-Antwort mit Headern und möglicherweise Nutzdaten im Body zurück. Darüber hinaus enthält die Antwort auch einen numerischen, dreistelligen Statuscode. Es gibt fünf Gruppen von Statuscodes, die durch die erste Ziffer identifiziert werden können:
+
+\begin{description}
+	\item \emph{1xx}: Wird für provisorische Antworten verwendet, wie z.B. der Information, dass die Bearbeitung der Anfrage trotz der Rückmeldung noch andauert.
+	\item \emph{2xx}: Wird zurückgegeben, wenn die Anfrage erfolgreich bearbeitet wurde. Der Server könnte beispielsweise weiter spezifizieren, dass eine neue Ressource angelegt wurde (201), z.B. durch einen POST-Befehl, oder dass im Antwortkörper (204) nichts erwartet wird, z.B. durch einen DELETE-Befehl.
+	\item \emph{3xx}: Wird wird Umleitungen benutzt. So kann dem Client bspw. mitgeteilt werden, dass sich eine Ressource an einem neuen Ort befindet.
+	\item \emph{4xx}: Bei der Bearbeitung der Anfrage ist ein Fehler aufgetreten, der durch den Client verursacht wurde. Dies können beispielsweise falsch formatierte Anfragen (400), Anfragen die vom Server nicht bearbeitet werden können (422), oder auch einfach Anfragen auf nicht existierende Ressourcen (404) sein.
+	\item \emph{5xx}: Bei der Bearbeitung der Anfrage ist ein Fehler aufgetreten, dessen Ursache beim Server liegt. 
+\end{description}
+
+
 \subsection{REST}
 
 Representational State Transfer (REST) ist eine Abstraktion der architektonischen Elemente innerhalb eines verteilten Hypermediasystems. Es ist somit ein Softwarearchitekturstil, der die architektonischen Prinzipien, Eigenschaften und Einschränkungen für die Umsetzung von internetbasierten verteilten Systemen definiert \parencite[86]{fielding2000architectural}. REST basiert auf fünf Kernprinzipien \parencite[11]{tilkov2015rest}:
