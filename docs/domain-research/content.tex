@@ -4,27 +4,29 @@
 
 \section{Einführung in die Thematik}
 
-Innerhalb dieses einführenden Kapitels in die Thematik werden Grundlagen bezüglich der Bereiche, in denen sich das Projekt bewegt, aufgezeigt. Dies umfasst eine kurze Erläutering der Prinzipien von HTTP und REST, sowie eine Untersuchung der verschiedenen Deskriptionsformate zum Beschreiben von REST APIs.
+Innerhalb dieses in die Thematik einführenden Kapitels werden Grundlagen bezüglich der Bereiche, in denen sich das Projekt bewegt, aufgezeigt. Zunächst wird ein kurzer Überblick über die grundlegenden Prinzipien von HTTP und REST gegeben. Anschließend wird untersucht, wie APIs mithilfe von verschiedenen Deskriptionsformaten maschinenlesbar beschrieben werden können. Ziel dieser Untersuchung ist es, eine abstrakte Modellierung von REST APIs zu konzipieren, die verwendet werden kann, um eine API Spezifikation in eine interne Datenstruktur zu überführen, welche dann anschließend angereichert wird um automatisiert Artefakte wie Dokumentation und Test-Cases zu generieren. Im Zuge dessen wird im nächsten Kapitel analysiert, welche Möglichkeiten in diesem Feld bereits existieren.
 
 \subsection{HTTP}
 
-Das \emph{Hypertext Transfer Protocol} (HTTP) ist ein Anwendungsprotokoll zur Kommunikation über ein Netzwerk. HTTP ist das primäre Kommunikationsprotokoll im World Wide Web, und wurde von der Internet Engineering Task Force (IETF) und dem World Wide Web Consortium (W3C) in einer Reihe von RFC-Dokumenten (z.B. \emph{RFC 7230}, \emph{RFC 7231} und \emph{RFC 7540}) standardisiert. Eine HTTP-Nachricht wird in der Regel über TCP übertragen, und besteht aus 4 Komponenten:
+Das \emph{Hypertext Transfer Protocol} (HTTP) ist ein Anwendungsprotokoll zur Kommunikation über ein Netzwerk. HTTP ist das primäre Kommunikationsprotokoll im World Wide Web, und wurde von der Internet Engineering Task Force (IETF) und dem World Wide Web Consortium (W3C) in einer Reihe von RFC-Dokumenten (z.B. \href{https://tools.ietf.org/html/rfc7230}{RFC 7230}, \href{https://tools.ietf.org/html/rfc7231}{RFC 7231} und \href{https://tools.ietf.org/html/rfc7540}{RFC 7540}) standardisiert. In diesem Abschnitt werden die wichtigsten Charakteristiken aus den aufgeführten RFCs zusammengefasst. \\
+
+Eine HTTP-Nachricht wird in der Regel über TCP übertragen, und besteht aus 4 Komponenten:
 
 \begin{description}
-	\item \emph{Verb / Methode}: Operationstyp, der durchgeführt werden soll, beispielsweise das Anfragen einer Ressource.
-    \item \emph{Ressourcenpfad}: Ein Bezeichner, der angibt, auf welche Ressource die HTTP-Operation angewendet werden soll.
-    \item \emph{Headers}: Zusätzliche Metadaten, ausgedrückt als Liste von Key/Value-Paaren.
-    \item \emph{Body}: Nutzdaten der Nachricht.
+	\item Verb / Methode: Operationstyp, der durchgeführt werden soll, beispielsweise das Anfragen einer Ressource.
+    \item Ressourcenpfad: Ein Bezeichner, der angibt, auf welche Ressource die HTTP-Operation angewendet werden soll.
+    \item Headers: Zusätzliche Metadaten, ausgedrückt als Liste von Key/Value-Paaren.
+    \item Body: Enhält die Nutzdaten der Nachricht.
 \end{description}
 
 Das HTTP Protokoll erlaubt die folgenden Operationen bzw. Methoden:
 
 \begin{description}
-	\item \emph{GET}: Die angegebene Ressource sollte im Body-Teil der Antwort zurückgegeben werden.
+	\item \emph{GET}: Die angegebene Ressource soll im Body-Teil der Antwort zurückgegeben werden.
 	\item \emph{HEAD}: Wie \emph{GET}, nur dass die Nutzdaten nicht zurückgegeben werden sollen. Dies ist nützlich, wenn nur überprüfen wird, ob eine Ressource existiert, oder wenn nur die Header abgerufen werden sollen.
 	\item \emph{POST}: Daten werden an den Server geschickt. Häufig wird diese Methode benutzt, um neue Ressourcen anzulegen.
 	\item \emph{DELETE}: Die angegebene Ressource löschen.
-	\item \emph{PUT}: Die angegeben Ressource mit neuen Daten ersetzen.
+	\item \emph{PUT}: Die angegebene Ressource mit neuen Daten ersetzen.
 	\item \emph{PATCH}: Ändert eine Ressource, ohne diese vollständig zu ersetzen.
 	\item \emph{TRACE}: Liefert die Anfrage so zurück, wie der Server sie empfangen hat.
 	\item \emph{OPTIONS}: Liefert eine Liste der vom Server unterstützten Methoden auf einer Ressource.
@@ -34,26 +36,27 @@ Das HTTP Protokoll erlaubt die folgenden Operationen bzw. Methoden:
 Wenn ein Client eine HTTP-Anfrage sendet, schickt der Server eine HTTP-Antwort mit Headern und möglicherweise Nutzdaten im Body zurück. Darüber hinaus enthält die Antwort auch einen numerischen, dreistelligen Statuscode. Es gibt fünf Gruppen von Statuscodes, die durch die erste Ziffer identifiziert werden können:
 
 \begin{description}
-	\item \emph{1xx}: Wird für provisorische Antworten verwendet, wie z.B. der Information, dass die Bearbeitung der Anfrage trotz der Rückmeldung noch andauert.
+	\item \emph{1xx}: Wird für informierende Antworten verwendet, wie z.B. der Meldung, dass die Bearbeitung der Anfrage trotz der Rückmeldung noch andauert.
 	\item \emph{2xx}: Wird zurückgegeben, wenn die Anfrage erfolgreich bearbeitet wurde. Der Server könnte beispielsweise weiter spezifizieren, dass eine neue Ressource angelegt wurde (201), z.B. durch einen POST-Befehl, oder dass im Antwortkörper (204) nichts erwartet wird, z.B. durch einen DELETE-Befehl.
-	\item \emph{3xx}: Wird wird Umleitungen benutzt. So kann dem Client bspw. mitgeteilt werden, dass sich eine Ressource an einem neuen Ort befindet.
-	\item \emph{4xx}: Bei der Bearbeitung der Anfrage ist ein Fehler aufgetreten, der durch den Client verursacht wurde. Dies können beispielsweise falsch formatierte Anfragen (400), Anfragen die vom Server nicht bearbeitet werden können (422), oder auch einfach Anfragen auf nicht existierende Ressourcen (404) sein.
+	\item \emph{3xx}: Wird für Umleitungen benutzt. So kann dem Client bspw. mitgeteilt werden, dass sich eine Ressource an einem neuen Ort befindet.
+	\item \emph{4xx}: Bei der Bearbeitung der Anfrage ist ein Fehler aufgetreten, der durch den Client verursacht wurde. Dies können beispielsweise falsch formatierte Anfragen (400), Anfragen die vom Server nicht bearbeitet werden können (422), oder auch Anfragen auf nicht existierende Ressourcen (404) sein.
 	\item \emph{5xx}: Bei der Bearbeitung der Anfrage ist ein Fehler aufgetreten, dessen Ursache beim Server liegt. 
 \end{description}
 
 
 \subsection{REST}
 
-Representational State Transfer (REST) ist eine Abstraktion der architektonischen Elemente innerhalb eines verteilten Hypermediasystems. Es ist somit ein Softwarearchitekturstil, der die architektonischen Prinzipien, Eigenschaften und Einschränkungen für die Umsetzung von internetbasierten verteilten Systemen definiert \parencite[86]{fielding2000architectural}. REST basiert auf fünf Kernprinzipien \parencite[11]{tilkov2015rest}:
-\begin{itemize}
-	\item Ressourcen als Abstraktion von Informationen, identifiziert durch einen eindeutigen \emph{resource identifier}
-	\item Verknüpfungen / Hypermedia
-	\item Standardmethoden
-	\item Unterschiedliche Repräsentationen
-	\item Statuslose Kommunikation
-\end{itemize}
+Representational State Transfer ist ein Muster von Ressourcenoperationen, das sich als Industriestandard für das Design von Webanwendungen etabliert hat \parencite[2]{battle2008bridging}. Während der traditionelle SOAP-basierte Ansatz für Web Services vollwertige Remote-Objekte mit Remote-Methodenaufruf und gekapselter Funktionalität verwendet, beschäftigt sich REST nur mit Datenstrukturen und der Übertragung ihres Zustands. \\
 
-In Folgendem wird untersucht, welche maschinenlesbare Spezifikationsformate zur Beschreibung von auf HTTP basierenden REST APIs zur Verfügung stehen. Ziel dieser Untersuchung ist es, eine abstrakte Modellierung von REST APIs zu konzipieren, die verwendet werden kann, um eine API Spezifikation in eine interne Datenstruktur zu überführen, welche dann anschließend angereichert wird um automatisiert Artefakte wie Dokumentation oder Test-Cases zu generieren. Im Zuge dessen wird ebenfalls analysiert, welche Möglichkeiten in diesem Feld bereits existieren.
+Representational State Transfer (REST) ist ein Softwarearchitekturstil, der die architektonischen Prinzipien, Eigenschaften und Einschränkungen für die Umsetzung von internetbasierten verteilten Systemen definiert \parencite[86]{fielding2000architectural}. REST basiert auf fünf Kernprinzipien \parencite[11]{tilkov2015rest}:
+
+\begin{itemize}
+	\item Ressourcen als Abstraktion von Informationen, identifiziert durch einen eindeutigen \emph{resource identifier} (die URI).
+	\item Verknüpfungen / Hypermedia (HATEOAS). Jede Repräsentation einer Ressource sollte ebenfalls Links zu anderen relevanten Ressourcen enthalten. Da in der Praxis die Verwendung von HATEOS jedoch recht selten ist \parencite[35--36]{rodriguez2016rest} werden im Folgenden auch solche APIs als RESTful bezeichnet, welche dieses Prinzip nicht umsetzen.
+	\item Verwendung von Standardmethoden. Der Zugriff auf Ressourcen und deren Manipulation erfolgt mit den in HTTP definierten Standardmethoden. Jede Methode hat ihr eigenes standardisiertes Verhalten und erwartete Statuscodes.
+	\item Unterschiedliche Repräsentationen. Clients kennen nicht direkt das interne Format und den Zustand der Ressourcen; sie arbeiten mit Ressourcendarstellungen (z.B. JSON oder XML), die den aktuellen oder beabsichtigten Zustand einer Ressource darstellen. Die Deklaration von Inhaltstypen in den Headern von HTTP-Nachrichten ermöglicht es Clients und Servern, Darstellungen korrekt zu verarbeiten \parencite[23]{rodriguez2016rest}.
+	\item Statuslose Kommunikation. Interaktionen zwischen einem Client und einer API sind zustandslos, d.h. jede Anfrage enthält alle notwendigen Informationen, die von der API zur Verarbeitung benötigt werden müssen; es wird kein Zustand auf dem Server gespeichert.
+\end{itemize}
 
 \subsection{Spezifikationsformate}
 
@@ -67,35 +70,16 @@ Es kann im Wesentlichen zwischen zwei verschiedenen Ansätzen zur Definition des
 \end{itemize}
 
 Bei beiden Ansätzen müssen Tests angelegt werden, die sicherstellen, dass die Implementierung nicht von der Beschreibung bzw. Dokumentation abweicht.
- 
+
+\subsubsection{JSON Schema}
+
+Aufgrund seiner leichten Verständlichkeit für Menschen wie auch Maschinen hat sich JSON zum beliebtesten Format entwickelt, um API-Anfragen und Antworten über das HTTP-Protokoll zu senden \parencite[263]{pezoa2016foundations}. Durch diese Popularität ist allerdings auch der Bedarf gestiegen, mithilfe eines Schemas den Aufbau eines JSON Dokuments konkret zu definieren. Dies kann z.B. für die Validierung von Anfragen oder Antworten dienen. Ohne Integritätsschicht müssen viele Fälle berücksichtigt werden, die bei fehlerhaften API-Aufrufen auftreten, was vermieden werden kann, wenn eine Schemadefinition verwendet wird, um Dokumente herauszufiltern, die nicht die richtige Form haben. \\
+
+JSON Schema ist eine einfache Schemasprache, die es Benutzern ermöglicht, die Struktur von JSON-Dokumenten einzuschränken. Die Definition ist noch lange kein Standard (die Spezifikation befindet sich derzeit im siebten Entwurf), aber es gibt bereits eine wachsende Anzahl von Anwendungen, die JSON-Schemadefinitionen unterstützen, und eine Vielzahl von Tools und Paketen, die die Validierung von Dokumenten anhand von JSON-Schema ermöglichen \parencite[264]{pezoa2016foundations}. \\
+
+JSON Schema stellt mehrere Schlüsselwörter zur Beschreibung und Validierung von JSON Dokumenten zur Verfügung. Beispielsweise kann so der Typ von Daten festgelegt werden (\lstinline|null|, \lstinline|boolean|, \lstinline|object|, \lstinline|array|, \lstinline|number|, \lstinline|integer| oder \lstinline|string|). Es können ebenfalls vielzählige Restriktionen zur Validierung definiert werden, unter anderem: \lstinline|enum|, \lstinline|minimum|, \lstinline|maximum|, \lstinline|minLength|, \lstinline|maxLength|, \lstinline|regex| (Validierung anhand eines RegEx-Musters), \lstinline|required|, \lstinline|email|, \lstinline|date-time| und \lstinline|uri|.
+
 \subsubsection{RAML}
-RAML (\emph{RESTful API Modeling Language}) ist ein auf YAML basierende Spezifikationsformat. Es wurde insbesondere für den \emph{Contract-First} Ansatz konzipiert, der Schwerpunkt liegt damit auf dem API-Design \parencites[277]{spichale2017api}[165]{tilkov2015rest}. Beschreibungen können in Markdown formatiert werden. Jedes RAML-Dokument beginnt mit der Angabe der RAML-Version und einigen allgemeinen Informationen zur API, wie Titel, URL und Version. Hier können ebenfalls Strukturierungshilfen wie Traits oder Datentypen definiert werden, welche dann im Rest des Dokumentes eingebunden werden können. Anschließend folgen die Beschreibungen der Ressourcen und Subressourcen. Zur Beschreibung von Requests und Responses können optional die bereits definierten Datentypen oder auch JSON-Schema Definitionen verwendet werden. Über \emph{Includes} kann die Spezifikation in mehrere Dateien aufgeteilt werden.
+RAML (\emph{RESTful API Modeling Language}) ist ein auf YAML basierendes Spezifikationsformat. Es wurde insbesondere für den \emph{Contract-First} Ansatz konzipiert, der Schwerpunkt liegt damit auf dem API-Design \parencites[277]{spichale2017api}[165]{tilkov2015rest}. Beschreibungen (z.B. von Ressourcen oder Parametern) können in Markdown formatiert werden. \\
 
-Folgendes Beispiel wurde aus der RAML-Spezifikation entnommen \parencite{ramlspec}.
-
-\begin{lstlisting}
-#%RAML 1.0
-title: GitHub API
-version: v3
-baseUri: https://api.github.com
-mediaType:  application/json
-securitySchemes:
-  oauth_2_0: !include securitySchemes/oauth_2_0.raml
-traits:
-securedBy: [ oauth_2_0 ]
-title: API with Types
-types:
-  User:
-    type: object
-    properties:
-      firstname: string
-      lastname:  string
-      age:       number
-/users/{id}:
-  get:
-    responses:
-      200:
-        body:
-          application/json:
-            type: User
-\end{lstlisting}
+Jedes RAML-Dokument beginnt mit der Angabe der RAML-Version und einigen allgemeinen Informationen zur API, wie Titel, URL und Version. Hier können ebenfalls Strukturierungshilfen wie Traits oder Datentypen definiert werden, welche dann im Rest des Dokumentes eingebunden und wiederverwendet werden können. Anschließend folgen die Beschreibungen der Ressourcen und Subressourcen. Zur Beschreibung von Requests und Responses können optional die bereits definierten Datentypen oder auch JSON-Schema Definitionen verwendet werden. Über \emph{Includes} kann die Spezifikation in mehrere Dateien aufgeteilt werden.
