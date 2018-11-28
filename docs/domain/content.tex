@@ -1,0 +1,67 @@
+%----------------------------------------------------------------------------------------
+%	INTRODUCTION
+%----------------------------------------------------------------------------------------
+
+\section{Einführung in die Thematik}
+
+Innerhalb dieses in die Thematik einführenden Kapitels werden Grundlagen bezüglich der Bereiche, in denen sich das Projekt bewegt, aufgezeigt. Zunächst wird ein kurzer Überblick über die grundlegenden Prinzipien von HTTP und REST gegeben. Anschließend wird untersucht, wie APIs mithilfe von verschiedenen Deskriptionsformaten maschinenlesbar beschrieben werden können. Ziel dieser Untersuchung ist es, eine Grundlage für die abstrakte Modellierung von REST APIs zu schaffen, die verwendet werden kann, um eine API Spezifikation in eine interne Datenstruktur zu überführen, welche dann anschließend angereichert wird um automatisiert Artefakte wie Dokumentation und Test-Cases zu generieren. Im Zuge dessen wird im nächsten Kapitel analysiert, welche Möglichkeiten in diesem Feld bereits existieren.
+
+\subsection{HTTP}
+
+Das \emph{Hypertext Transfer Protocol} (HTTP) ist ein Anwendungsprotokoll zur Kommunikation über ein Netzwerk. HTTP ist das primäre Kommunikationsprotokoll im World Wide Web, und wurde von der Internet Engineering Task Force (IETF) und dem World Wide Web Consortium (W3C) in einer Reihe von RFC-Dokumenten (z.B. \href{https://tools.ietf.org/html/rfc7230}{RFC 7230}, \href{https://tools.ietf.org/html/rfc7231}{RFC 7231} und \href{https://tools.ietf.org/html/rfc7540}{RFC 7540}) standardisiert. In diesem Abschnitt werden die wichtigsten Charakteristiken aus den aufgeführten RFCs zusammengefasst. \\
+
+Eine HTTP-Nachricht wird in der Regel über TCP übertragen, und besteht aus 4 Komponenten:
+
+\begin{description}
+	\item Verb / Methode: Operationstyp, der durchgeführt werden soll, beispielsweise das Anfragen einer Ressource.
+    \item Ressourcenpfad: Ein Bezeichner, der angibt, auf welche Ressource die HTTP-Operation angewendet werden soll.
+    \item Headers: Zusätzliche Metadaten, ausgedrückt als Liste von Key/Value-Paaren.
+    \item Body: Enhält die Nutzdaten der Nachricht.
+\end{description}
+
+Das HTTP Protokoll erlaubt die folgenden Operationen bzw. Methoden:
+
+\begin{description}
+	\item \emph{GET}: Die angegebene Ressource soll im Body-Teil der Antwort zurückgegeben werden.
+	\item \emph{HEAD}: Wie \emph{GET}, nur dass die Nutzdaten nicht zurückgegeben werden sollen. Dies ist nützlich, wenn nur überprüft wird, ob eine Ressource existiert, oder wenn nur die Header abgerufen werden sollen.
+	\item \emph{POST}: Daten werden an den Server geschickt. Häufig wird diese Methode benutzt, um neue Ressourcen anzulegen.
+	\item \emph{DELETE}: Die angegebene Ressource löschen.
+	\item \emph{PUT}: Die angegebene Ressource mit neuen Daten ersetzen.
+	\item \emph{PATCH}: Ändert eine Ressource, ohne diese vollständig zu ersetzen.
+	\item \emph{TRACE}: Liefert die Anfrage so zurück, wie der Server sie empfangen hat.
+	\item \emph{OPTIONS}: Liefert eine Liste der vom Server unterstützten Methoden auf einer Ressource.
+	\item \emph{CONNECT}: Eine Tunneling-Verbindung über einen HTTP-Proxy herstellen, die normalerweise für verschlüsselte Kommunikationen benötigt wird.
+\end{description}
+
+Wenn ein Client eine HTTP-Anfrage sendet, schickt der Server eine HTTP-Antwort mit Headern und möglicherweise Nutzdaten im Body zurück. Darüber hinaus enthält die Antwort auch einen numerischen, dreistelligen Statuscode. Es gibt fünf Gruppen von Statuscodes, die durch die erste Ziffer identifiziert werden können:
+
+\begin{description}
+	\item \emph{1xx}: Wird für informierende Antworten verwendet, wie z.B. der Meldung, dass die Bearbeitung der Anfrage trotz der Rückmeldung noch andauert.
+	\item \emph{2xx}: Wird zurückgegeben, wenn die Anfrage erfolgreich bearbeitet wurde. Der Server könnte beispielsweise weiter spezifizieren, dass eine neue Ressource angelegt wurde (201), z.B. durch einen POST-Befehl, oder dass im Antwortkörper nichts erwartet wird (204), z.B. durch einen DELETE-Befehl.
+	\item \emph{3xx}: Wird für Umleitungen benutzt. So kann dem Client bspw. mitgeteilt werden, dass sich eine Ressource an einem neuen Ort befindet.
+	\item \emph{4xx}: Bei der Bearbeitung der Anfrage ist ein Fehler aufgetreten, der durch den Client verursacht wurde. Dies können beispielsweise falsch formatierte Anfragen (400), Anfragen die vom Server nicht bearbeitet werden können (422), oder auch Anfragen auf nicht existierende Ressourcen (404) sein.
+	\item \emph{5xx}: Bei der Bearbeitung der Anfrage ist ein Fehler aufgetreten, dessen Ursache beim Server liegt. 
+\end{description}
+
+
+\subsection{REST}
+
+Representational State Transfer ist ein Muster von Ressourcenoperationen, das sich als Industriestandard für das Design von Webanwendungen etabliert hat \parencite[2]{battle2008bridging}. Während der traditionelle SOAP-basierte Ansatz für Web Services vollwertige Remote-Objekte mit Remote-Methodenaufruf und gekapselter Funktionalität verwendet, beschäftigt sich REST nur mit Datenstrukturen und der Übertragung ihres Zustands. \\
+
+Representational State Transfer (REST) ist ein Softwarearchitekturstil, der die architektonischen Prinzipien, Eigenschaften und Einschränkungen für die Umsetzung von internetbasierten verteilten Systemen definiert \parencite[86]{fielding2000architectural}. REST basiert auf fünf Kernprinzipien \parencite[11]{tilkov2015rest}:
+
+\begin{itemize}
+	\item Ressourcen als Abstraktion von Informationen, identifiziert durch einen eindeutigen \emph{resource identifier} (die URI).
+	\item Verknüpfungen / Hypermedia (HATEOAS). Jede Repräsentation einer Ressource sollte ebenfalls Links zu anderen relevanten Ressourcen enthalten. Da in der Praxis die Verwendung von HATEOAS jedoch recht selten ist \parencite[35--36]{rodriguez2016rest} werden im Folgenden auch solche APIs als RESTful bezeichnet, welche dieses Prinzip nicht umsetzen.
+	\item Verwendung von Standardmethoden. Der Zugriff auf Ressourcen und deren Manipulation erfolgt mit den in HTTP definierten Standardmethoden. Jede Methode hat ihr eigenes standardisiertes Verhalten und erwartete Statuscodes.
+	\item Unterschiedliche Repräsentationen. Clients kennen nicht direkt das interne Format und den Zustand der Ressourcen; sie arbeiten mit Ressourcendarstellungen (z.B. JSON oder XML), die den aktuellen oder beabsichtigten Zustand einer Ressource darstellen. Die Deklaration von Inhaltstypen in den Headern von HTTP-Nachrichten ermöglicht es Clients und Servern, Darstellungen korrekt zu verarbeiten \parencite[23]{rodriguez2016rest}.
+	\item Statuslose Kommunikation. Interaktionen zwischen einem Client und einer API sind zustandslos, d.h. jede Anfrage enthält alle notwendigen Informationen, die von der API zur Verarbeitung benötigt werden müssen; es wird kein Zustand auf dem Server gespeichert.
+\end{itemize}
+
+\subsubsection{Best Practices}
+
+\subsection{JSON API}
+
+\subsection{Testing von REST APIs}
+
+\subsection{Dokumentation von REST APIs}

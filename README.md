@@ -6,11 +6,13 @@ This project aims to improve the design and implementation process of REST APIs,
 
 Thesis chapters (in German):  
 - [ ] [Einleitung](https://github.com/nebulize/comet/blob/master/docs/introduction/introduction.pdf)  
-- [ ] [Einführung in die Thematik](https://github.com/nebulize/comet/blob/master/docs/domain-research/domain-research.pdf)
+- [ ] [Einführung in die Thematik](https://github.com/nebulize/comet/blob/master/docs/domain/domain.pdf)
+- [ ] [Spezifikationsformate](https://github.com/nebulize/comet/blob/master/docs/formats/formats.pdf)
 - [ ] Verwandte Arbeiten und Systeme
 - [ ] Abgrenzung von anderen Arbeiten
 - [ ] Empirische Untersuchung
-- [ ] Anforderungen und Ziele
+- [ ] Ziele
+- [ ] Anforderungen
 - [ ] Datenmodellierung
 - [ ] Konzeption des Prototyps
 - [ ] Technische Dokumentation
