@@ -58,10 +58,38 @@ Representational State Transfer (REST) ist ein Softwarearchitekturstil, der die 
 	\item Statuslose Kommunikation. Interaktionen zwischen einem Client und einer API sind zustandslos, d.h. jede Anfrage enthält alle notwendigen Informationen, die von der API zur Verarbeitung benötigt werden müssen; es wird kein Zustand auf dem Server gespeichert.
 \end{itemize}
 
-\subsubsection{Best Practices}
+\subsection{Spezifikationsformate}
 
-\subsection{JSON API}
+In den letzten Jahren wurde viele Vorschläge gemacht, wie REST APIs menschen- und maschinenlesbar beschrieben werden können. Allen gemeinsam ist, dass die grundlegenden Eigenschaften von REST und HTTP (Ressourcen, Operationen, Requests, Responses, Parameter, usw.) in einem Modell zusammengefasst werden. Hierfür existieren eine Vielzahl von \emph{Description Languages} (DLs), von denen in diesem Projekt OpenAPI, die am weitesten verbreitete \parencite{scherer2016description}, als Basis benutzt wird.
+
+\subsubsection{JSON Schema}
+
+Aufgrund seiner leichten Verständlichkeit für Menschen wie auch Maschinen hat sich JSON zum beliebtesten Format entwickelt, um API-Anfragen und Antworten über das HTTP-Protokoll zu senden \parencite[263]{pezoa2016foundations}. Durch diese Popularität ist allerdings auch der Bedarf gestiegen, mithilfe eines Schemas den Aufbau eines JSON Dokuments konkret zu definieren. Dies kann z.B. für die Validierung von Anfragen oder Antworten dienen. Ohne Integritätsschicht müssen viele Fälle berücksichtigt werden, die bei fehlerhaften API-Aufrufen auftreten, was vermieden werden kann, wenn eine Schemadefinition verwendet wird, um Dokumente herauszufiltern, die nicht die richtige Form haben. \\
+
+JSON Schema ist eine einfache Schemasprache, die es Benutzern ermöglicht, die Struktur von JSON-Dokumenten einzuschränken. Die Definition ist noch lange kein Standard (die Spezifikation befindet sich derzeit im siebten Entwurf), aber es gibt bereits eine wachsende Anzahl von Anwendungen, die JSON-Schemadefinitionen unterstützen, und eine Vielzahl von Tools und Paketen, die die Validierung von Dokumenten anhand von JSON-Schema ermöglichen \parencite[264]{pezoa2016foundations}. Dies kann selbst zur Client-seitigen Validierung von Benutzereingaben verwendet werden \parencite{sturgeon2018validation}. \\
+
+JSON Schema stellt mehrere Schlüsselwörter zur Beschreibung und Validierung von JSON Dokumenten zur Verfügung. Beispielsweise kann so der Typ von Daten festgelegt werden (\lstinline|null|, \lstinline|boolean|, \lstinline|object|, \lstinline|array|, \lstinline|number|, \lstinline|integer| oder \lstinline|string|). Es können ebenfalls vielzählige Restriktionen zur Validierung definiert werden, unter anderem: \lstinline|enum|, \lstinline|minimum|, \lstinline|maximum|, \lstinline|minLength|, \lstinline|maxLength|, \lstinline|regex| (Validierung anhand eines RegEx-Musters), \lstinline|required|, \lstinline|email|, \lstinline|date-time| und \lstinline|uri|. \\
+
+\subsubsection{OpenAPI}
+
+Die OpenAPI DL ist teil des Swagger Frameworks, einem Open-Source-Framework, das aus einem JSON- bzw. YAML-Format zur Beschreibung von RESTful APIs und aus diversen Werkzeugen, die daraus zum Beispiel eine Dokumentation generieren können, besteht. OpenAPI und JSON Schema sind zwei verschiedene Spezifikationen, die sich gegenseitig inspiriert haben, sich aber subtil unterscheiden. \\
+
+OpenAPI zielt darauf ab, sowohl das Servicemodell zu beschreiben (die API im Allgemeinen, Endpunkte, Anfragemetadaten wie Header, Authentifizierungsstrategien, Antwortmetadaten usw.), als auch den HTTP-Request/Response-Body mit einem Bündel von Schlüsselwörtern basierend auf dem JSON-Schema, die im Laufe der Zeit divergiert haben. Es gibt aktuell Bemühungen, diese Divergenz zu lösen \parencite{sturgeon2018divergence}. JSON Schema wiederum zielt darauf ab, eine Instanz von JSON-Daten zu beschreiben, wie sie in einer HTTP-Anfrage oder -Antwort gefunden wird, ist aber in keiner Weise auf eine HTTP-API beschränkt \parencite{sturgeon2018harmony}. \\
+
+Die OpenAPI DL ist ähnlich wie andere Spezifikationsformate strukturiert: zunächst werden allgemeine Informationen zur API, wie Name, Version, Pfad und Authentifizierungsverfahren festgelegt; im Anschluss folgen die Definitionen der einzelnen Endpunkte, mit ihren Parametern und Requests bzw. Responses.
 
 \subsection{Testing von REST APIs}
 
-\subsection{Dokumentation von REST APIs}
+In diesem Abschnitt wird ein kurzer Überblick über die wichtigsten Testverfahren gegeben, mit denen REST APIs getestet werden können:
+
+\subsubsection{Funktionstests}
+Die wichtigste testbare Eigenschaft eines Programms ist seine Funktionalität, die durch die Anforderungen spezifiziert ist \parencite[457]{ludewig2007software}. Funktionstests sind im Wesentlichen ein Test spezifischer Funktionen innerhalb der Codebasis. Diese Funktionen wiederum stellen spezifische Szenarien dar, um sicherzustellen, dass die API innerhalb der erwarteten Parameter funktioniert und dass Fehler gut behandelt werden, wenn die Ergebnisse außerhalb der erwarteten Parameter liegen. In der grundlegendsten Form sollte ein korrekter Response-Body die Darstellung der angeforderten Ressource unter Verwendung des angeforderten Medientyps oder mindestens einer gültigen HTTP-Fehlercodemeldung enthalten. Funktionstests sollten nicht nur den regulären Testfall einbeziehen, sondern auch Szenarien von Errata- und Edge-Cases in das Testverfahren implementieren. Ein Beispiel hierfür ist eine Anfrage mit falschen Attributen oder Attributwerten, auf die die API mit einem korrekten Fehlercode antworten sollte.
+
+\subsubsection{Last- und Stresstests}
+Hierbei wird getestet, ob sich das System auch unter hoher oder höchster Belastung so verhält, wie es gefordert war \parencite[458]{ludewig2007software}. Diese Tests werden typischerweise nach Fertigstellung der Codebasis durchgeführt. REST APIs werden gegen den theoretischen regulären Datenverkehr, den die API im normalen, täglichen Gebrauch erwartet, getestet. Ein zweiter Belastungstest wird typischerweise mit dem theoretischen maximalen Traffic durchgeführt. Eventuell wird auch ein dritter Belastungstest mit Traffic, der über dem theoretischen Maximum liegt, durchgeführt.
+
+\subsubsection{Sicherheitstests}
+Sicherheitstests und Penetrationstests sind Teil des Sicherheitsauditprozesses. Bei Sicherheitstests wird zum Beispiel die Verwaltung von Benutzerrechten und die Validierung von Berechtigungsprüfungen für den Ressourcenzugriff getestet. Die Penetrationstests gehen einen Schritt weiter. Bei dieser Art von Test wird die API von jemandem angegriffen, der nur über begrenzte Kenntnisse der API selbst verfügt, um den Bedrohungsvektor aus einer externen Perspektive zu beurteilen.
+
+\subsection{Verwandte Arbeiten und Systeme}
+

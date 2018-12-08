@@ -7,13 +7,7 @@ This project aims to improve the design and implementation process of REST APIs,
 Thesis chapters (in German):  
 - [ ] [Einleitung](https://github.com/chiiya/comet/blob/master/docs/introduction/introduction.pdf)  
 - [ ] [Einführung in die Thematik](https://github.com/chiiya/comet/blob/master/docs/domain/domain.pdf)
-- [ ] [Spezifikationsformate](https://github.com/chiiya/comet/blob/master/docs/formats/formats.pdf)
-- [ ] Verwandte Arbeiten und Systeme
-- [ ] Abgrenzung von anderen Arbeiten
-- [ ] Empirische Untersuchung
-- [ ] [Ziele](https://github.com/chiiya/comet/blob/master/docs/goals/goals.pdf)
-- [ ] Anforderungen
-- [ ] Datenmodellierung
+- [ ] [Anforderungen, Ziele und Rahmenbedingungen](https://github.com/chiiya/comet/blob/master/docs/goals/goals.pdf)
 - [ ] Konzeption des Prototyps
 - [ ] Technische Dokumentation
 - [ ] Fazit
