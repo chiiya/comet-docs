@@ -4,7 +4,7 @@
 
 \section{Einführung in die Thematik}
 
-Innerhalb dieses in die Thematik einführenden Kapitels werden Grundlagen bezüglich der Bereiche, in denen sich das Projekt bewegt, aufgezeigt. Zunächst wird ein kurzer Überblick über die grundlegenden Prinzipien von HTTP und REST gegeben. Anschließend wird untersucht, wie APIs mithilfe von verschiedenen Deskriptionsformaten maschinenlesbar beschrieben werden können. Ziel dieser Untersuchung ist es, eine Grundlage für die abstrakte Modellierung von REST APIs zu schaffen, die verwendet werden kann, um eine API Spezifikation in eine interne Datenstruktur zu überführen, welche dann anschließend angereichert wird um automatisiert Artefakte wie Dokumentation und Test-Cases zu generieren. Im Zuge dessen wird im nächsten Kapitel analysiert, welche Möglichkeiten in diesem Feld bereits existieren.
+Innerhalb dieses in die Thematik einführenden Kapitels werden Grundlagen bezüglich der Bereiche, in denen sich das Projekt bewegt, aufgezeigt. Zunächst wird ein kurzer Überblick über die grundlegenden Prinzipien von HTTP und REST gegeben. Anschließend wird untersucht, wie APIs mithilfe von verschiedenen Deskriptionsformaten maschinenlesbar beschrieben werden können. Ziel dieser Untersuchung ist es, eine Grundlage für die abstrakte Modellierung von REST APIs zu schaffen, die verwendet werden kann, um eine API Spezifikation in eine interne Datenstruktur zu überführen, welche dann anschließend angereichert wird um automatisiert Artefakte wie Dokumentation und Test-Cases zu generieren. Im Zuge dessen wird im letzten Abschnitt analysiert, welche Möglichkeiten in diesem Feld bereits existieren.
 
 \subsection{HTTP}
 
@@ -91,5 +91,29 @@ Hierbei wird getestet, ob sich das System auch unter hoher oder höchster Belast
 \subsubsection{Sicherheitstests}
 Sicherheitstests und Penetrationstests sind Teil des Sicherheitsauditprozesses. Bei Sicherheitstests wird zum Beispiel die Verwaltung von Benutzerrechten und die Validierung von Berechtigungsprüfungen für den Ressourcenzugriff getestet. Die Penetrationstests gehen einen Schritt weiter. Bei dieser Art von Test wird die API von jemandem angegriffen, der nur über begrenzte Kenntnisse der API selbst verfügt, um den Bedrohungsvektor aus einer externen Perspektive zu beurteilen.
 
+\newpage
+
 \subsection{Verwandte Arbeiten und Systeme}
+
+Zweck dieses Kapitels ist die Darstellung von verwandten Arbeiten, welche sich ebenfalls mit der Automatisierung von Testing und Dokumentation von REST APIs beschäftigen. Daneben werden ebenfalls bereits existierende oder im Stadium der Entwicklung befindende Systeme einbezogen. Die betrachteten Systeme und Arbeiten werden mit der Zielsetzung der vorliegenden Thesis verglichen und Unterschiede und Gemeinsamkeiten hervorgehoben.
+
+\subsubsection{Wissenschaftliche Arbeiten}
+
+In einem Paper aus 2017 haben \textcite{ed2018automatic} ein System zur automatischen Generierung von Testcases auf Basis einer OpenAPI Spezifikation entworfen und als Prototyp implementiert. Es wird dafür zuerst die Spezifikation in ein OpenAPI Metamodell extrahiert, welches dann in mehreren Schritten mit Beispielwerten für Parameter und Attribute angereichert und anschließend in ein Testsuite Metamodell umgewandelt wird. Hieraus werden im letzten Schritt die entsprechenden Testcases generiert. Berücksichtigt werden hierbei nicht nur nominale sondern auch fehlerhafte Tests (also Anfragen mit bewusst falschen Parameter- oder Attributwerten, mit denen auf entsprechende Validierungsfehler geprüft wird). Das System kommt der in diesem Projekt gesetzten Zielsetzung und dem dafür gewählten Vorgehen sehr nahe, es gibt jedoch einige Einschränkungen, über die sich dieses Projekt abgrenzen kann:
+	\begin{itemize}
+		\item \emph{OpenAPI Tests Generator} ist auf ein bestimmtes Spezifikationsformat (OpenAPI) beschränkt, und nicht mit anderen Formaten kompatibel. Es wurde zwar ein Metamodell erstellt, in welches die OpenAPI Spezifikation übertragen wird (und somit über entsprechende Erweiterungen eventuell auch andere Formate), bei der Erstellung dieses Modells wurden jedoch nur die Charakteristiken der OpenAPI Spezifikation berücksichtigt. Ein System welches mehrere Formate unterstützt, sollte bereits bei der Modellierung entsprechende Analysen und Abstraktionen anwenden.
+		\item Der Prototyp ist lediglich als Eclipse-Plugin mit Generierung der Testcases in Java implementiert worden, und somit auf eine bestimmte Entwicklungsumgebung und Sprache (Java) beschränkt. Das Ziel dieses Projektes ist die Implementierung einer CLI-Applikation, welche so modular gestaltet ist, dass mehrere Input- und Output-Formate möglich sind. Aufgrund der Vorgaben im Unternehmen wird für die Implementierung des Prototyps als Input eine OpenAPI Spezifikation und als Output PHP gewählt.
+	\end{itemize}
+	
+In einem Paper aus 2015 stellten \textcite{fertig2015model} einen modellbasierten Ansatz zur Generierung von Testcases vor. Hierzu wurde eine eigene Description Language erstellt, mit der die REST API beschrieben werden kann. Der Fokus liegt bei der Generierung von möglichst vielen Testcases; für jeden Endpunkt werden alle möglichen Kombinationen von Headern und Attributen abgebildet. Es werden zwar auch hier zum Teil fehlerhafte Tests generiert, mit dem Ziel zu überprüfen, dass der Server fehlerhafte Angaben korrekt abweist, jedoch sind diese im Vergleich zum \emph{OpenAPI Test Generator} sehr beschränkt, und hängen stark davon ab, dass in der Spezifikation komplette Definitionen vorhanden sind. Ebenso scheinen optionale Query-Parameter nicht unterstützt zu werden. Die Implementierung des Prototyps wurde ebenfalls für Java entwickelt. Die größte Einschränkung ist jedoch die Verwendung einer eigenen DL, wodurch zusätzliche Einsteigshürden entstehen, und Tools für bestehende Spezifikationsformate nicht verwendet werden können.\\
+
+\textcite{pinheiro2013model} verwenden einen ähnlichen Ansatz, basieren ihr Modell jedoch auf einer angepassten \emph{UML protocol state machine}, welche vom Tester manuell erstellt werden muss. Die Umsetzung fand hier jedoch nur im Ansatz statt, und wichtige Aspekte wie Ressourcenrepräsentationen oder optionale Parameter wurden nicht implementiert.\\
+
+\textcite{chakrabarti2009test} entwickelten ein HTTP-Testing-Tool, das speziell für das Testen von RESTful-Webservices entwickelt wurde. Es basiert auf XML-Dateien, die die erforderlichen Testfälle konfigurieren. In einem Pilotprojekt wurden Testfälle zur automatischen Generierung erstellt, die einer vollständigen Liste aller gültigen Kombinationen von Query-Parameter-Werten entsprechen. Daraus ergab sich eine Testsuite mit 42.767 Testfällen. Ein wesentlicher Nachteil des Systems ist das benötigte Vorwissen zur Konfiguration der Testcases mithilfe der zum Teil recht komplexen XML-Definitionen.
+
+Ein komplexerer Ansatz wurde von \textcite{arcuri2017restful} vorgestellt. Hier wird ebenfalls von einer OpenAPI bzw. Swagger Definition ausgegangen, und auf Basis dieser Tests generiert. Mithilfe von Bytecode-Manipulation bei JVM-Sprachen werden Informationen zu Code-Coverage und Verzweigungsabständen abgerufen, mit denen die optimalen Testcases ausgewählt werden. Abgesehen von der offensichtlichen Einschränkung auf JVM-Sprachen, prüft das System auch lediglich auf HTTP Statuscodes, und gleich die erhaltenen Antworten nicht mit Schemas o.ä. ab. \\
+
+Ein Großteil der Arbeit in der Literatur konzentriert sich auf Black-Box-Tests von SOAP-Webservices, die mit WSDL (Web Services Description Language) beschrieben werden. Es wurden verschiedene Strategien vorgeschlagen, einige Beispiele sind \textcite{xu2005testing}, \textcite{bai2005wsdl}, \textcite{martin2006automated}, \textcite{ma2008wsdl} und \textcite{bartolini2009ws}.
+
+
 
