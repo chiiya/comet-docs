@@ -13,7 +13,7 @@ Thesis chapters (in German):
   - [x] Testing von REST APIs
   - [x] Verwandte Arbeiten und Systeme
   - [x] Abgrenzung von anderen Arbeiten
-- [ ] [Anforderungen, Ziele und Rahmenbedingungen](https://github.com/chiiya/comet-docs/blob/master/goals/goals.pdf)
+- [ ] [Anforderungen, Ziele und Rahmenbedingungen](https://github.com/chiiya/comet-docs/blob/master/chapter-2/chapter-2.pdf)
   - [ ] Empirische Untersuchung
   - [ ] Anforderungen
   - [x] Ziele
