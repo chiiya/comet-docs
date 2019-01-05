@@ -18,7 +18,7 @@ Thesis chapters (in German):
   - [ ] Anforderungen
   - [x] Ziele
   - [ ] Funktionsumfang des Prototyps
-- [ ] Konzeption des Prototyps
+- [ ] [Konzeption des Prototyps](https://github.com/chiiya/comet-docs/blob/master/chapter-3/chapter-3.pdf)
   - [ ] Datenmodellierung
   - [ ] Architektur
   - [ ] Vorgehensmodell
