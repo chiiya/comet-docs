@@ -59,7 +59,7 @@ Ein Testcase führt ebenfalls mehrere Hooks aus, die von dem Entwickler angepass
 
 Unter Berücksichtigung der beiden Ziele \textbf{Modularität} und \textbf{einfache Einbindung in Projekte} wird für die Umsetzung eine Javascript CLI-Applikation entwickelt. In den meisten Projekten sind bereits Javascript-Abhängigkeiten installiert, sodass sich das Tool leicht einbinden lässt. Durch NPM und die Aufteilung der Applikation in einzelne Pakete mit dynamischen Imports lässt sich ebenfalls die Modularität erreichen.\\
 
-Die CLI-Applikation besteht aus einer Menge an Kommandos, welche alle den gleichen Aufbau haben, schematisch dargestellt in Abbildung \ref{fig:architecture}. Jedes Kommando besteht aus einem \emph{Parser}, der die API Spezifikation einliest, einem oder mehreren \emph{Decorators}, welche die geparste Spezifikation mit kommandospezifischer Logik und Informationen anreichern, sowie einer oder mehreren \emph{Factories}, die einen Output generieren. \\
+Die CLI-Applikation besteht aus einer Menge an Befehlen, welche alle den gleichen Aufbau haben, schematisch dargestellt in Abbildung \ref{fig:architecture}. Jeder Befehl besteht aus einem \emph{Parser}, der die API Spezifikation einliest, einem oder mehreren \emph{Decorators}, welche die geparste Spezifikation mit befehlspezifischer Logik und Informationen anreichern, sowie einer oder mehreren \emph{Factories}, die einen Output generieren. \\
 
 \begin{figure}[H]
 \centering
@@ -74,7 +74,7 @@ Diese Komponenten sind beliebig austauschbar und konfigurierbar. Dadurch wird er
 %------------------------------------------------
 
 \subsection{Vorgehensmodell}
-In folgendem Abschnitt wird kurz auf die Vorgehensweise der zwei Kommandos \lstinline|make:schemas| und \lstinline|make:tests| eingegangen, welche im Prototyp der Applikation umgesetzt werden sollen. 
+In folgendem Abschnitt wird kurz auf die Vorgehensweise der zwei Befehle \lstinline|make:schemas| und \lstinline|make:tests| eingegangen, welche im Prototyp der Applikation umgesetzt werden sollen. 
 
 \subsubsection{Generierung von JSON Schemas}
 Zur Generierung der JSON Schemas werden ein \emph{Decorator} und eine \emph{Factory} implementiert:
@@ -85,7 +85,7 @@ Zur Generierung der JSON Schemas werden ein \emph{Decorator} und eine \emph{Fact
 \end{itemize}
 
 \subsubsection{Generierung von Testcases}
-Zur Generierung von Testcases werden ebenfalls ein neuer \emph{Decorator} und eine \emph{Factory} implementiert. Das Kommando benutzt außerdem den bereits für JSON Schemas definierten \emph{Decorator}, da in den Tests die Antworten vom Server mithilfe von JSON Schemas validiert werden.
+Zur Generierung von Testcases werden ebenfalls ein neuer \emph{Decorator} und eine \emph{Factory} implementiert. Der Befehl benutzt außerdem den bereits für JSON Schemas definierten \emph{Decorator}, da in den Tests die Antworten vom Server mithilfe von JSON Schemas validiert werden.
 
 \begin{itemize}
 	\item \textbf{Decorator}: der Decorator der Decorator iteriert über alle Endpunkte und erstellt das in Abbildung \ref{fig:testsuite} definierte Testsuite Modell. Für jede Anfrage werden mithilfe von verschiedenen Heuristiken Parameterwerte abgeleitet, die in den Testanfragen benutzt werden können. Die hierfür verwendeten Heuristiken basieren auf den bereits in \textcite{ed2018automatic} definierten Heuristiken, wurden jedoch für eine erhöhte Genauigkeit noch angepasst bzw. erweitert und an die aktuelle Syntax der OpenAPI v3.0.2. Spezifikation angepasst: 
