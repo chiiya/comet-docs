@@ -80,7 +80,7 @@ In folgendem Abschnitt wird kurz auf die Vorgehensweise der zwei Befehle \lstinl
 Zur Generierung der JSON Schemas werden ein \emph{Decorator} und eine \emph{Factory} implementiert:
 
 \begin{itemize}
-	\item \textbf{Decorator}: der Decorator iteriert über alle Endpunkte und darin definierte Request- und Response-Bodies, und wandelt, falls vorhanden, die jeweiligen Open-API Schema Definitionen in valide JSON Schemas um. Dafür werden die bereits in Abschnitt \ref{sec:datastructures}[3.1] beschriebenen Unterschiede berücksichtigt. Anschließend werden die erstellten JSON Schemas der API Spezifikation hinzugefügt.
+	\item \textbf{Decorator}: der Decorator iteriert über alle Endpunkte und darin definierte Request- und Response-Bodies, und wandelt, falls vorhanden, die jeweiligen Open-API Schema Definitionen in valide JSON Schemas um. Dafür werden die bereits in Abschnitt \ref{sec:datastructures} beschriebenen Unterschiede berücksichtigt. Anschließend werden die erstellten JSON Schemas der API Spezifikation hinzugefügt.
 	\item \textbf{Factory}: die Factory schreibt die generierten JSON Schemas in \lstinline|json|-Dateien in den konfigurierten Output-Ordner, und verwendet dabei einfach verständliche Dateinamen. So wird das JSON Schema der Anfrage eines HTTP \lstinline|PATCH| Aufrufs auf die Ressource \lstinline|/books| z.B. in \lstinline|requests/books-update.json| gespeichert.
 \end{itemize}
 
