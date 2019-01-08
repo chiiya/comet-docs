@@ -5,7 +5,7 @@ Bachelor thesis project for computer science @ TH Köln, made in cooperation wit
 This project aims to improve the design and implementation process of REST APIs, by using an API specification for quality assurance and automation of different tasks, such as testing and documentation.
 
 Thesis chapters (in German):  
-- [ ] [Einleitung](https://github.com/chiiya/comet-docs/blob/master/introduction/introduction.pdf)  
+- [x] [Einleitung](https://github.com/chiiya/comet-docs/blob/master/introduction/introduction.pdf)  
 - [x] [Einführung in die Thematik](https://github.com/chiiya/comet-docs/blob/master/chapter-1/chapter-1.pdf)
   - [x] HTTP
   - [x] REST
@@ -18,9 +18,9 @@ Thesis chapters (in German):
   - [ ] Anforderungen
   - [x] Ziele
   - [ ] Funktionsumfang des Prototyps
-- [ ] [Konzeption des Prototyps](https://github.com/chiiya/comet-docs/blob/master/chapter-3/chapter-3.pdf)
-  - [ ] Datenmodellierung
-  - [ ] Architektur
-  - [ ] Vorgehensmodell
+- [x] [Konzeption des Prototyps](https://github.com/chiiya/comet-docs/blob/master/chapter-3/chapter-3.pdf)
+  - [x] Datenmodellierung
+  - [x] Architektur
+  - [x] Vorgehensmodell
 - [ ] Fazit
 
