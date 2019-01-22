@@ -6,6 +6,61 @@
 
 \subsection{Empirische Untersuchung}
 
+Zu Beginn der Anforderungsermittlung wurde eine Umfrage im Unternehmen durchgeführt, bei der die Entwickler gebeten wurden, Auskunft über die Projekte zu geben, die sie betreuen. Ziel der Untersuchung war es, mehr über die verwendeten Technologien und damit verbundenen Rahmenbedingungen zu erfahren, sowie persönliche Einschätzungen der Entwickler zu Testing und anderen automatisierbaren Aspekten der API-Entwicklung einzuholen. In diesem Abschnitt werden die Ergebnisse der Umfrage aufgeführt.\\
+
+\subsubsection{Verwendete Technologien}
+
+Alle befragten Entwickler gaben an, dass sie API-Projekte betreuen, die in PHP geschrieben sind. Andere Sprachen sind dabei kaum vertreten (dargestellt in Abbildung \ref{fig:sv-languages}). Als primär verwendete Frameworks wurden Symfony (60\%) und Laravel (30\%) genannt, wobei auch einige andere Frameworks zu einem geringeren Maß verwendet werden (siehe Abbildung \ref{fig:sv-frameworks}).
+
+\begin{figure}[H]
+\centering
+  \includegraphics[width=0.8\textwidth]{../images/languages.png}
+  \caption{Verwendete Sprachen}
+  \label{fig:sv-languages}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+  \includegraphics[width=0.8\textwidth]{../images/frameworks.png}
+  \caption{Verwendete Frameworks}
+  \label{fig:sv-frameworks}
+\end{figure}
+
+90\% der Entwickler gaben an, dass ihre APIs primär die REST-Architektur befolgen; die restlichen 10\% benutzen GraphQL als Grundlage. Auf die Frage, ob sie Description Languages zur Beschreibung ihrer APIs verwenden, antworteten 50\% der Entwickler positiv. Die Beschreibungen werden dabei zu 60\% manuell geschrieben, und zu 40\% automatisch aus dem Code der Anwendung generiert. Die verwendeten Description Languages sind in Abbildung \ref{fig:sv-dls} dargestellt.
+
+\begin{figure}[H]
+\centering
+  \includegraphics[width=0.8\textwidth]{../images/dl_type.png}
+  \caption{Verwendete Description Languages}
+  \label{fig:sv-dls}
+\end{figure}
+
+\subsubsection{Testing der APIs}
+
+Bei der Frage wie die APIs aktuell getestet werden, fällt auf, dass viele Entwickler keine automatisierten Tests verwenden. Stattdessen werden häufig nur manuelle Tests, insbesondere mithilfe von Postman, durchgeführt. Lediglich 30\% der Entwickler gaben an, dass sie Unit bzw. Integration Tests einsetzen (siehe Abbildung \ref{fig:sv-testing}). Dennoch bewerteten die meisten Entwickler die Testabdeckung der APIs insgesamt als eher positiv, wenn auch hervorzuheben ist, dass einige APIs eine unzureichende bzw. nichtexistente Testabdeckung aufweisen (siehe Abbildungen \ref{fig:sv-coverage} und \ref{fig:sv-insufficient-coverage}).
+
+\begin{figure}[H]
+\centering
+  \includegraphics[width=0.8\textwidth]{../images/testing.png}
+  \caption{Testing der APIs}
+  \label{fig:sv-testing}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+  \includegraphics[width=0.8\textwidth]{../images/coverage.png}
+  \caption{Testabdeckung der APIs insgesamt}
+  \label{fig:sv-coverage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+  \includegraphics[width=0.8\textwidth]{../images/insufficient_coverage.png}
+  \caption{Unzureichende Testabdeckung mancher APIs}
+  \label{fig:sv-insufficient-coverage}
+\end{figure}
+
+
 \subsection{Anforderungen}
 
 \subsection{Ziele}
