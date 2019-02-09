@@ -37,7 +37,14 @@ Alle befragten Entwickler gaben an, dass sie API-Projekte betreuen, die in PHP g
 
 \subsubsection{Testing der APIs}
 
-Bei der Frage wie die APIs aktuell getestet werden, fällt auf, dass viele Entwickler keine automatisierten Tests verwenden. Stattdessen werden häufig nur manuelle Tests, insbesondere mithilfe von Postman, durchgeführt. Lediglich 30\% der Entwickler gaben an, dass sie Unit bzw. Integration Tests einsetzen (siehe Abbildung \ref{fig:sv-testing}). Dennoch bewerteten die meisten Entwickler die Testabdeckung der APIs insgesamt als eher positiv, wenn auch hervorzuheben ist, dass einige APIs eine unzureichende bzw. nichtexistente Testabdeckung aufweisen (siehe Abbildungen \ref{fig:sv-coverage} und \ref{fig:sv-insufficient-coverage}).
+Bei der Frage wie die APIs aktuell getestet werden, fällt auf, dass viele Entwickler keine automatisierten Tests verwenden. Stattdessen werden häufig nur manuelle Tests, insbesondere mithilfe von Postman, durchgeführt. Lediglich 30\% der Entwickler gaben an, dass sie Unit bzw. Integration Tests einsetzen (siehe Abbildung \ref{fig:sv-testing}). Dennoch bewerteten die meisten Entwickler die Testabdeckung der APIs insgesamt als eher positiv, wenn auch hervorzuheben ist, dass einige APIs eine unzureichende bzw. nichtexistente Testabdeckung aufweisen (siehe Abbildungen \ref{fig:sv-coverage} und \ref{fig:sv-insufficient-coverage}). 
+
+Es wurde ebenfalls gefragt, wie hilfreich verschiedene Automatisierungen für die Entwickler wären. Herauszuheben sind: 
+
+\begin{itemize}
+	\item 60\% aller Entwickler würden die automatische Generierung von grundlegenden Integreation Tests für ihre Projekte als sehr hilfreich einstufen, 30\% als eher hilfreich, und lediglich 10\% haben eine neutrale Einstellung.
+	\item 45,5\% würden abrufbare, aktuelle JSON Schemas der API Endpunkte als eher hilfreich einstufen, 27,3\% als sehr hilfreich, 27,3\% sind neutral.
+\end{itemize} 
 
 \begin{figure}[H]
 \centering
@@ -60,9 +67,6 @@ Bei der Frage wie die APIs aktuell getestet werden, fällt auf, dass viele Entwi
   \label{fig:sv-insufficient-coverage}
 \end{figure}
 
-
-\subsection{Anforderungen}
-
 \subsection{Ziele}
 
 Im Folgenden werden die konkreten Ziele des Systems hierarchisch angeordnet. Zunächst werden die strategischen, langfristigen Ziele festgelegt, aus denen sich anschließend die taktischen und operativen Ziele ableiten. Die Ziele sind in der jeweiligen Kategorie nach ihrer Priorität angeordnet. Bei allen Zielen wird davon ausgegangen, dass eine API Spezifikation vorliegt, auf Basis derer die Aufgaben durchgeführt werden können.
@@ -73,9 +77,9 @@ Im Folgenden werden die konkreten Ziele des Systems hierarchisch angeordnet. Zun
 
 \begin{enumerate}
 	\item \textbf{Optimierung des REST-API Entwicklungsprozesses.} \\
-	Durch zumindest teilweise Automatisierung von verschiedenen Aufgaben im Entwicklungsprozess (Testing \& Dokumentation) soll Zeit eingespart werden.
+	Durch zumindest teilweise Automatisierung von verschiedenen Aufgaben im Entwicklungsprozess (bspw. Testing) soll Zeit eingespart werden.
 	\item \textbf{Erhöhte Softwarequalität.} \\
-	Die Vereinheitlichung des Prozesses und auch die automatisierte Generierung von Artefakten sollte zu einer höheren Softwarequalität und einfacheren Wartung führen.
+	Die Vereinheitlichung des Prozesses und auch die automatisierte Generierung von Artefakten sollte zu einer höheren Softwarequalität und einfacheren Wartung führen. Durch die Verwendung von generierten Testcases soll insbesondere bei Projekten mit zur Zeit nicht vorhandenen Tests eine zufriedenstellende Testabdeckung erreicht werden. Auch bei neuen Projekten soll die Anwendung eine gewisse Grundarbeit leisten, und unnötige manuelle Arbeit abnehmen.
 	\item \textbf{Vereinheitlichung des REST-API Entwicklungsprozesses.} \\
 	Mit der Unterstützung des Entwicklungsprozesses durch das System sollen Grenzen und Vorgaben gesetzt werden, in denen sich die Entwickler bewegen. Das Design der REST APIs folgt einem einheitlicherem Konzept, wodurch Nutzer nicht bei jeder API mit neuen Designentscheidungen konfrontiert sind. Generierte Artefakte sind konsistent, und ihre Nutzung muss nur einmal erlernt werden.	
 \end{enumerate}
@@ -119,4 +123,25 @@ Im Folgenden werden die konkreten Ziele des Systems hierarchisch angeordnet. Zun
 	Insbesondere bei den Testcases, die noch weitere manuelle Ergänzungen der Entwickler benötigen, sollen bei Neugenerierung nicht die Ergänzungen überschrieben werden.
 \end{enumerate}
 
+\subsection{Anforderungen}
+
+Aus der Auswertung der Umfrage, sowie weiteren Gesprächen mit Entwicklern des Unternehmens, lassen sich folgende funktionale Anforderungen ableiten, angeordnet nach ihrer Priorität:
+
+\begin{enumerate}
+	\item Die Anwendung muss eine OpenAPI Spezifikation einlesen und verarbeiten können. Andere Spezifikationsformate werden zu einem geringeren Maße verwendet, sollten aber zukünftig auch unterstützt werden.
+	\item Für alle API Endpunkte müssen valide JSON Schemas sowohl für Requests wie auch Responses generiert werden.
+	\item Für die 2 meistverwendeten Frameworks (Symfony und Laravel) müssen grundlegende Testcases generiert werden, die auf valide Antworten des Servers prüfen. 
+	\item Es sollte zu jedem API Endpunkt mindestens ein Testcase generiert werden. Für jede mögliche Parameterkombination sollte ebenfalls ein neues Testcase generiert werden.
+	\item Die Testcases sollten die Antworten des Servers mithilfe der generierten JSON Schemas validieren. 
+	\item Um die Anfragen in den Testcases ausführen zu können, müssen für erforderliche Parameter und Attribute Beispielwerte abgeleitet werden. 
+	\item Es sollten nicht nur nominale, sondern auch fehlerhafte Testcases generiert werden. Für jedes Attribut, für das ein fehlerhafter Wert abgeleitet werden kann, sollte ein neuer Testcase erstellt werden, und überprüft werden, dass der Server einen Client-Fehler zurückgibt.
+	\item Die Anwendung sollte so strukturiert sein, dass einzelne Teile leicht ausgetauscht werden können, und untereinander kompatibel sind. Hierfür werden Interfaces definiert, welche die einzelnen Komponenten implementieren.
+	\item Relevante Optionen, die sich eventuell von Projekt zu Projekt unterscheiden, wie die genaue Zusammensetzung der einzelnen Komponenten, oder auch Dateipfade der generierten Artefakte, sollten mithilfe einer Konfigurationsdatei angepasst werden können.
+	\item Die Anwendung kann Dokumentationsartefakte wie eine HTML API-Dokumentation oder Postman Collections generieren.
+	\item Postman Collections sollten in einem CI-Kontext automatisch über die Postman API synchronisiert werden.
+	\item Die Dokumentation sollte responsiv und interaktiv sein. Die Interaktivität bezeichnet hierbei die Möglichkeit Beispielanfragen direkt aus der Dokumentation heraus auszuführen.
+\end{enumerate}
+
 \subsection{Funktionsumfang des Prototyps}
+
+In dem Prototypen, der im Zuge dieses Projektes entstehen soll, sollen die Ziele 1, 2 und 3 umgesetzt werden. Der Fokus liegt somit auf dem Testing von APIs. Die konkreten Anforderungen hierzu sind die oben aufgelisteten Nummern 1-7. Im Prototypen wird jedoch nur ein Eingabe-Format (eine OpenAPI-Spezifikation), und ein Ausgabe-Format für die Testcases (Laravel) implementiert. Der Prototyp soll zeigen, dass es möglich ist auf Basis einer API Spezifikation automatisch grundlegende Integration Tests für alle Endpunkte der API zu generieren. Dadurch werden nicht nur verschiedene Aspekte der Anwendung getestet, sondern auch sichergestellt, dass der Vertrag der API, der in der Spezifikation festgelegt ist, nicht gebrochen wird. Durch die automatische Generierung von Testcases kann hier eine sehr hohe Abdeckung des Vertrages (d.h. alle Endpunkte und Parameterkombinationen, mit Validierung der jeweiligen Antworten mithilfe der in der Spezifikation definierten Schemas) erreicht werden.\\
