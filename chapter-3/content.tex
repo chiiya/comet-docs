@@ -22,10 +22,10 @@ Es wurden ebenfalls zwei weitere Datenmodelle erstellt, die für die im Prototyp
 \begin{enumerate}
 	\item Einige im OpenAPI Schema vorhandene Attribute wie \lstinline|nullable| oder \lstinline|deprecated| werden nicht unterstützt.
 	\item Die \lstinline|type| Angabe kann sowohl ein String wie auch ein Array von Strings sein.
-	\item in \lstinline|$schema| wird zusätzlich ein Link zur verwendeten JSON-Schema Version angegeben. 
+	\item In \lstinline|$schema| wird zusätzlich ein Link zur verwendeten JSON-Schema Version angegeben. 
 \end{enumerate}
 
-Diese Unterschiede müssen bei einer Umwandlung rekursiv aufgelöst werden, da ein Schema weitere verschaltete Schema-Defitionen enthalten kann. Das Modell einer JSON-Schema Definition ist in Abbildung \ref{fig:jsonschema} dargestellt. \\
+Diese Unterschiede müssen bei einer Umwandlung rekursiv aufgelöst werden, da ein Schema weitere verschachtelte Schema-Defitionen enthalten kann. Das Modell einer JSON-Schema Definition ist in Abbildung \ref{fig:jsonschema} dargestellt. \\
 
 \begin{figure}
 \centering
@@ -34,7 +34,7 @@ Diese Unterschiede müssen bei einer Umwandlung rekursiv aufgelöst werden, da e
   \label{fig:jsonschema}
 \end{figure}
 
-Das Testsuite-Metamodell (Abbildung \ref{fig:testsuite}) stellt den Aufbau einer Testsuite dar, welche aus mehreren  Testcases besteht. In jedem Testcase wird eine Anfrage mit entsprechenden Parametern ausgeführt, sowie eine Reihe von Assertions:
+Das Testsuite-Metamodell (Abbildung \ref{fig:testsuite}) stellt den Aufbau einer Testsuite dar, welche aus mehreren  Testcases besteht. In jedem Testcase wird eine Anfrage mit entsprechenden Parametern ausgeführt, sowie eine Reihe von Assertions.
 
 \begin{enumerate}
 	\item \lstinline|ValidStatusCodeAssertion| prüft, ob der HTTP-Statuscode der erhaltenen Antwort valide ist. Bei nominalen Testcases wird ein erfolgreicher Statuscode (2xx) erwartet, bei fehlerhaften Testcases ein Client-Fehler (4xx).
@@ -63,12 +63,12 @@ Die CLI-Applikation besteht aus einer Menge an Befehlen, welche alle den gleiche
 
 \begin{figure}[H]
 \centering
-  \includegraphics[width=\textwidth]{../images/architecture.png}
+  \includegraphics[width=\textwidth]{../images/architecture-model.png}
   \caption{Architektur}
   \label{fig:architecture}
 \end{figure}
 
-Diese Komponenten sind beliebig austauschbar und konfigurierbar. Dadurch wird ermöglicht, dass bei Änderungen am Input- oder Output-Format die restliche Logik nicht verändert werden muss. So können z.B. mithilfe von 2 Factories Tests für zwei unterschiedliche Sprachen oder Frameworks generiert werden, ohne dass etwas an dem Parsing oder Anreichern der Daten (im Falle der Tests z.B. das Ableiten von Parameter-Werten) verändert werden muss. Durch dynamische Imports mithilfe eines \emph{Resolvers} werden die einzelnen Pakete zur Laufzeit eingebunden. Somit können Entwickler auch eigene Pakete erstellen, die dann von der Applikation verwendet werden können. Da Javascript keine Interfaces unterstützt, wird stattdessen Typescript für die Implementierung verwendet. Damit kann sichergestellt werden, dass Entwickler auf fest definierte Interfaces und Typdefinitionen zurückgreifen können, an die sich ihre Pakete halten müssen. 
+Diese Komponenten sind beliebig austauschbar und konfigurierbar. Dadurch wird ermöglicht, dass bei Änderungen am Input- oder Output-Format die restliche Logik nicht verändert werden muss. So können z.B. mithilfe von 2 Factories Tests für zwei unterschiedliche Sprachen oder Frameworks generiert werden, ohne dass etwas an dem Parsing oder Anreichern der Daten (im Falle der Tests z.B. das Ableiten von Parameterwerten) verändert werden muss. Durch dynamische Imports mithilfe eines \emph{Resolvers} werden die einzelnen Pakete zur Laufzeit eingebunden. Somit können Entwickler auch eigene Pakete erstellen, die dann von der Applikation verwendet werden können. Da Javascript keine Interfaces unterstützt, wird stattdessen Typescript für die Implementierung verwendet. Damit kann sichergestellt werden, dass Entwickler auf fest definierte Interfaces und Typdefinitionen zurückgreifen können, an die sich ihre Pakete halten müssen. 
 
 
 %------------------------------------------------
@@ -80,7 +80,7 @@ In folgendem Abschnitt wird kurz auf die Vorgehensweise der zwei Befehle \lstinl
 Zur Generierung der JSON Schemas werden ein \emph{Decorator} und eine \emph{Factory} implementiert:
 
 \begin{itemize}
-	\item \textbf{Decorator}: der Decorator iteriert über alle Endpunkte und darin definierte Request- und Response-Bodies, und wandelt, falls vorhanden, die jeweiligen Open-API Schema Definitionen in valide JSON Schemas um. Dafür werden die bereits in Abschnitt \ref{sec:datastructures} beschriebenen Unterschiede berücksichtigt. Anschließend werden die erstellten JSON Schemas der API Spezifikation hinzugefügt.
+	\item \textbf{Decorator}: der Decorator iteriert über alle Endpunkte und darin definierte Request- und Response-Bodies, und wandelt, falls vorhanden, die jeweiligen Open-API Schema Definitionen in valide JSON Schemas um. Dafür werden die bereits in Abschnitt \ref{sec:datastructures} beschriebenen Unterschiede berücksichtigt. Anschließend werden die erstellten JSON Schemas dem API-Modell hinzugefügt.
 	\item \textbf{Factory}: die Factory schreibt die generierten JSON Schemas in \lstinline|json|-Dateien in den konfigurierten Output-Ordner, und verwendet dabei einfach verständliche Dateinamen. So wird das JSON Schema der Anfrage eines HTTP \lstinline|PATCH| Aufrufs auf die Ressource \lstinline|/books| z.B. in \lstinline|requests/books-update.json| gespeichert.
 \end{itemize}
 
@@ -94,8 +94,8 @@ Zur Generierung von Testcases werden ebenfalls ein neuer \emph{Decorator} und ei
 		\item Der Wert eines Parameters kann abgeleitet werden, wenn eine Anfrage mit einem automatisch generierten Wert (bspw. ein String wenn der Parameter vom Typ \lstinline|string| ist) erfolgreich ist.
 		\item Der Wert eines Parameters kann abgeleitet werden, wenn für die selbe Ressource in einer der vorhanden Operationen ein Attribut gleichen Namens im Schema der Antwort definiert ist.
 	\end{enumerate}
-	Für fehlerhafte Testcases müssen fehlerhafte Parameter bzw. Attribut-Werte abgeleitet werden, was mithilfe verschiedener Regeln basierend auf dem Typ und den im Schema definierten Einschränkungen möglich ist, aufgelistet in den Tabellen \ref{tab:types} und \ref{tab:constraints}. 
-	\item \textbf{Factory}: die Factory generiert die einzelnen Testcases in einer bestimmten Zielsprache. Dafür werden die in den Decorators angelegten Parameterwerte und JSON Schemas verwendet. Für jede API Operation wird, wenn für alle erfoderlichen Parameter (\lstinline|p.required = true|) Werte abgeleitet werden konnten,  für jede mögliche Parameterkombination ein separates Testcase erstellt, in dem eine Anfrage an den Server mit den abgeleiteten Parameterwerten geschickt wird. Anschließend wird geprüft, dass die Antwort einen validen Statuscode hat (2xx bei nominalen Testcases bzw. 4xx bei fehlerhaften Testcases), und mit den generierten JSON Schemas validiert werden kann. Über \emph{Hooks}, die bei jedem Testcase vor und nach dem Ausführen der Anfrage aufgerufen werden, kann der Entwickler Anpassungen vornehmen. So kann z.B. Authentifizierung ermöglicht werden. 
+	Für fehlerhafte Testcases müssen fehlerhafte Parameter- bzw. Attributwerte abgeleitet werden, was mithilfe verschiedener Regeln basierend auf dem Typ und den im Schema definierten Einschränkungen möglich ist, aufgelistet in den Tabellen \ref{tab:types} und \ref{tab:constraints}. 
+	\item \textbf{Factory}: die Factory generiert die einzelnen Testcases in einer bestimmten Zielsprache. Dafür werden die in den Decorators angelegten Parameterwerte und JSON Schemas verwendet. Für jede API Operation wird, wenn für alle erfoderlichen Parameter (\lstinline|p.required = true|) Werte abgeleitet werden konnten,  für jede mögliche Parameterkombination ein separates Testcase erstellt, in dem eine Anfrage an den Server mit den abgeleiteten Parameterwerten geschickt wird. Anschließend wird geprüft, dass die Antwort einen validen Statuscode hat (2xx bei nominalen Testcases, bzw. 4xx bei fehlerhaften Testcases), und mit den generierten JSON Schemas validiert werden kann. Über \emph{Hooks}, die bei jedem Testcase vor und nach dem Ausführen der Anfrage aufgerufen werden, kann der Entwickler Anpassungen vornehmen. So kann z.B. Authentifizierung ermöglicht werden. 
 \end{itemize}
 
 \begin{table}[]

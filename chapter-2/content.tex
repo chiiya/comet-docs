@@ -6,7 +6,7 @@
 
 \subsection{Empirische Untersuchung}
 
-Zu Beginn der Anforderungsermittlung wurde eine Umfrage im Unternehmen durchgeführt, bei der die Entwickler gebeten wurden, Auskunft über die Projekte zu geben, die sie betreuen. Ziel der Untersuchung war es, mehr über die verwendeten Technologien und damit verbundenen Rahmenbedingungen zu erfahren, sowie persönliche Einschätzungen der Entwickler zu Testing und anderen automatisierbaren Aspekten der API-Entwicklung einzuholen. In diesem Abschnitt werden die Ergebnisse der Umfrage aufgeführt.\\
+Zu Beginn der Anforderungsermittlung wurde eine Umfrage im Unternehmen durchgeführt, bei der die Entwickler gebeten wurden, Auskunft über die Projekte zu geben, die sie betreuen. Ziel der Untersuchung war es, mehr über die verwendeten Technologien und damit verbundenen Rahmenbedingungen zu erfahren, sowie persönliche Einschätzungen der Entwickler zu Testing und anderen automatisierbaren Aspekten der API-Entwicklung einzuholen. In diesem Abschnitt werden die Ergebnisse der Umfrage aufgeführt.
 
 \subsubsection{Verwendete Technologien}
 
@@ -121,6 +121,8 @@ Im Folgenden werden die konkreten Ziele des Systems hierarchisch angeordnet. Zun
 	Das System sollte ohne großen Aufwand in neue oder bestehende Projekte eingebunden werden können.  
 	\item \textbf{Partielle Überschreibung von Testcases bei Neugenerierung. } \\
 	Insbesondere bei den Testcases, die noch weitere manuelle Ergänzungen der Entwickler benötigen, sollen bei Neugenerierung nicht die Ergänzungen überschrieben werden.
+	\item \textbf{Unterstützung von semantischen Tests.} \\
+	Da die automatisch generierten Testcases lediglich die Syntax, und nicht die Semantik der API testen können, sollte das System die Entwickler dabei unterstützen Tests zu schreiben, die auf die Semantik prüfen. Davon ausgehend, dass Entwickler die Semantik der API mit replizierbaren Testdaten bereits manuell geprüft haben, könnte dies zum Beispiel durch einen neuen Befehl umgesetzt werden, der die aktuellen Antworten der API zu jeder möglichen Parameterkombination speichert, und daraus ein Testskelett generiert.
 \end{enumerate}
 
 \subsection{Anforderungen}
@@ -131,7 +133,7 @@ Aus der Auswertung der Umfrage, sowie weiteren Gesprächen mit Entwicklern des U
 	\item Die Anwendung muss eine OpenAPI Spezifikation einlesen und verarbeiten können. Andere Spezifikationsformate werden zu einem geringeren Maße verwendet, sollten aber zukünftig auch unterstützt werden.
 	\item Für alle API Endpunkte müssen valide JSON Schemas sowohl für Requests wie auch Responses generiert werden.
 	\item Für die 2 meistverwendeten Frameworks (Symfony und Laravel) müssen grundlegende Testcases generiert werden, die auf valide Antworten des Servers prüfen. 
-	\item Es sollte zu jedem API Endpunkt mindestens ein Testcase generiert werden. Für jede mögliche Parameterkombination sollte ebenfalls ein neues Testcase generiert werden.
+	\item Es sollte zu jedem API Endpunkt mindestens ein Testcase generiert werden. Für jede mögliche Parameterkombination sollte ebenfalls ein neuer Testcase generiert werden.
 	\item Die Testcases sollten die Antworten des Servers mithilfe der generierten JSON Schemas validieren. 
 	\item Um die Anfragen in den Testcases ausführen zu können, müssen für erforderliche Parameter und Attribute Beispielwerte abgeleitet werden. 
 	\item Es sollten nicht nur nominale, sondern auch fehlerhafte Testcases generiert werden. Für jedes Attribut, für das ein fehlerhafter Wert abgeleitet werden kann, sollte ein neuer Testcase erstellt werden, und überprüft werden, dass der Server einen Client-Fehler zurückgibt.
@@ -144,4 +146,4 @@ Aus der Auswertung der Umfrage, sowie weiteren Gesprächen mit Entwicklern des U
 
 \subsection{Funktionsumfang des Prototyps}
 
-In dem Prototypen, der im Zuge dieses Projektes entstehen soll, sollen die Ziele 1, 2 und 3 umgesetzt werden. Der Fokus liegt somit auf dem Testing von APIs. Die konkreten Anforderungen hierzu sind die oben aufgelisteten Nummern 1-7. Im Prototypen wird jedoch nur ein Eingabe-Format (eine OpenAPI-Spezifikation), und ein Ausgabe-Format für die Testcases (Laravel) implementiert. Der Prototyp soll zeigen, dass es möglich ist auf Basis einer API Spezifikation automatisch grundlegende Integration Tests für alle Endpunkte der API zu generieren. Dadurch werden nicht nur verschiedene Aspekte der Anwendung getestet, sondern auch sichergestellt, dass der Vertrag der API, der in der Spezifikation festgelegt ist, nicht gebrochen wird. Durch die automatische Generierung von Testcases kann hier eine sehr hohe Abdeckung des Vertrages (d.h. alle Endpunkte und Parameterkombinationen, mit Validierung der jeweiligen Antworten mithilfe der in der Spezifikation definierten Schemas) erreicht werden.\\
+In dem Prototypen, der im Zuge dieses Projektes entstehen soll, sollen die Ziele 1, 2 und 3 umgesetzt werden. Der Fokus liegt somit auf dem Testing von APIs. Die konkreten Anforderungen hierzu sind die oben aufgelisteten Nummern 1-7. Im Prototyp wird jedoch nur ein Eingabe-Format (eine OpenAPI-Spezifikation), und ein Ausgabe-Format für die Testcases (Laravel) implementiert. Der Prototyp soll zeigen, dass es möglich ist auf Basis einer API Spezifikation automatisch grundlegende Integration Tests für alle Endpunkte der API zu generieren. Dadurch werden nicht nur verschiedene Aspekte der Anwendung getestet, sondern auch sichergestellt, dass der Vertrag der API, der in der Spezifikation festgelegt ist, nicht gebrochen wird. Durch die automatische Generierung von Testcases kann hier eine sehr hohe Abdeckung des Vertrages (d.h. alle Endpunkte und Parameterkombinationen, mit Validierung der jeweiligen Antworten mithilfe der in der Spezifikation definierten Schemas) erreicht werden.\\

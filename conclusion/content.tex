@@ -1,0 +1,20 @@
+%----------------------------------------------------------------------------------------
+%	INTRODUCTION
+%----------------------------------------------------------------------------------------
+
+\section{Fazit}
+
+Mit der Umsetzung dieses Projektes konnte erfolgreich ein Prototyp implementiert werden, der demonstriert, dass auf Basis einer API Spezifikation nominale und fehlerhafte Testcases automatisch generiert werden können. Für die Evaluierung des Prototyps wurde eine Beispielanwendung implementiert, die eine RESTful API für Reisebücher umsetzt. Hierfür wurde das Laravel-Framework benutzt. Bei insgesamt 20 Endpunkten mit verschiedenen Query-Parametern werden 112 Testcases generiert, und damit eine Testabdeckung von 88\% erreicht. \\
+
+Es konnten erfolgreich die operativen Ziele 1, 2, 3, und 6, bzw. die Anforderungen 1-9 umgesetzt werden, was über den initial definierten Funktionsumfang hinausgeht. Dennoch sind noch zahlreiche Ausbaumöglichkeiten vorhanden. Abgesehen von sämtlichen Zielen zu Dokumentationsartefakten, gibt es auch beim Generieren von Testcases noch viele Verbesserungsmöglichkeiten, die in einer späteren Iteration bzw. Fortführung des Projektes umgesetzt werden könnten:
+
+\begin{itemize}
+	\item Partielle Überschreibung von Testcases bei Neugenerierung.
+	\item Unterstützung bei der Erstellung von semantischen Tests.
+	\item Umsetzung weiterer Heuristiken zur Ableitung von Parameter- und Attributwerten.
+	\item Umsetzung weiterer Assertions in den Testcases.
+	\item Möglichkeit, Testcases zu löschen und diese bei Neugenerierung nicht wieder anzulegen (z.B. nötig bei sich gegenseitig ausschließenden Parametern).
+	\item Evaluation des Tools mit Projekten des Unternehmens.
+	\item Abstraktes Datenmodell und Unterstützung mehrerer Spezifikationsformate.
+	\item Generierung von Output in weiteren Sprachen bzw. Frameworks (insbesondere Symfony).
+\end{itemize}
